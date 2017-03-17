@@ -1,0 +1,75 @@
+html, body {
+  font-family: "Helvetica Neue", "PingFang SC", "Microsoft YaHei",sans-serif;
+  font-weight: 100;
+  background: #000; }
+
+.jumbotron {
+  position: fixed;
+  background: url("../img/kon.jpg") top center fixed no-repeat;
+  -webkit-background-size: cover;
+  background-size: cover;
+  min-width: 100%;
+  min-height: 100%;
+  margin-bottom: 0;
+  opacity: 0.4;
+  z-index: -9999; }
+
+div.musicCircle {
+  position: absolute;
+  border: 2px solid rgba(219, 133, 255, 0.5);
+  border-radius: 50%;
+  width: 45rem;
+  height: 45rem;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-shadow: 0 0 .5rem 0.1rem #e1a8ff, 0 0 .5rem 0.1rem #e1a8ff inset; }
+
+div.musicCircle div.rhythmCircle {
+  position: absolute;
+  border: 2px solid rgba(219, 133, 255, 0.5);
+  border-radius: 50%;
+  width: 50rem;
+  height: 50rem;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-shadow: 0 0 .5rem 0.1rem #e1a8ff, 0 0 .5rem 0.1rem #e1a8ff inset;
+  mix-blend-mode: screen;
+  opacity: .5; }
+
+.musicCircle div.animeBar {
+  position: relative;
+  border-radius: .5rem;
+  width: 100%;
+  height: 4.5rem;
+  background-color: rgba(146, 146, 146, 0.5);
+  box-shadow: 0 .05rem 2rem .1rem #464646; }
+
+div.musicCircle p.animeName {
+  text-align: center;
+  font-size: 4.5rem;
+  margin: 0;
+  color: #eaeaea;
+  text-shadow: 0 0 .5rem white, 0 0 .3rem #def1f5;
+  z-index: 100;
+  letter-spacing: 0.5rem; }
+
+div.musicCircle div.songInfo {
+  position: relative;
+  color: white;
+  letter-spacing: 0.3rem; }
+
+div.musicCircle div#songTitle {
+  top: 17.5%;
+  left: 10%;
+  float: left;
+  font-size: 3.2rem;
+  text-shadow: 0 0 0.5rem #d78bff, 0 0 0.3rem #d78bff; }
+
+div.musicCircle div#singer {
+  float: right;
+  top: 55%;
+  right: 10%;
+  font-size: 2rem;
+  text-shadow: 0 0 0.5rem #d78bff, 0 0 0.3rem #d78bff; }
+
+/*# sourceMappingURL=main.css.map */
