@@ -18,17 +18,26 @@ $(document).ready(function () {
         //animeBar($musicCircle, $animeBar);
     })
 
-
 });
 
 function centerMusicCircle($musicCircle) {
-    $musicCircle.css({top: windowHeight / 2 - $musicCircle.height() / 2 - MUSIC_CIRCLE_OFFSET,
-        left: windowWidth / 2 - $musicCircle.width() / 2});
+    if (windowHeight > 740) {
+        console.log("CHANGE");
+        $musicCircle.css({top: windowHeight / 2 - $musicCircle.height() / 2 - MUSIC_CIRCLE_OFFSET,
+            left: windowWidth / 2 - $musicCircle.width() / 2});
+    } else {
+        console.log(windowHeight);
+        $musicCircle.css({top: windowHeight / 2 - $musicCircle.height() / 2,
+            left: windowWidth / 2 - $musicCircle.width() / 2});
+    }
+
 
     var $rhythmCircle = $("div.musicCircle div.rhythmCircle");
 
     $rhythmCircle.css({top: ($musicCircle.height() - $rhythmCircle.height()) / 2,
         left: ($musicCircle.width() - $rhythmCircle.width()) / 2});
+
+
 }
 
 function animeBar($musicCircle, $animeBar) {
