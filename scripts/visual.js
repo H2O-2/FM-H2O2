@@ -6,30 +6,34 @@ var windowHeight = window.innerHeight,
 $(document).ready(function () {
     var $window = $(window),
         $musicCircle = $(".musicCircle"),
+        $albumCover = $("#albumCover"),
         $animeBar = $(".animeBar"),
         $playerDiv = $("#playerControl");
 
     var $drawSvg = SVG('playerControl')
         .size($musicCircle.height() + PROGRESS_START_HEIGHT, $musicCircle.width() + PROGRESS_CIRCLE_RADIUS * 2);
 
-    centerMusicCircle($musicCircle);
+    centerMusicCircle($musicCircle, $albumCover);
     animeBar($musicCircle, $animeBar);
     playerControl($playerDiv, $drawSvg);
 
     $window.resize(function () {
         windowHeight = $window.height();
         windowWidth = $window.width();
-        centerMusicCircle($musicCircle);
+        centerMusicCircle($musicCircle, $albumCover);
         animeBar($musicCircle, $animeBar);
         playerControl($playerDiv, $drawSvg);
     })
 
 });
 
-function centerMusicCircle($musicCircle) {
+function centerMusicCircle($musicCircle, $albumCover) {
     console.log("CHANGE");
     $musicCircle.css({top: windowHeight / 2 - $musicCircle.height() / 2 - MUSIC_CIRCLE_OFFSET,
         left: windowWidth / 2 - $musicCircle.width() / 2});
+    $albumCover.css({top: windowHeight / 2 - $musicCircle.height() / 2 -
+                        MUSIC_CIRCLE_OFFSET + ($musicCircle.height() - $albumCover.height()) / 2 + PROGRESS_CIRCLE_BORDER,
+        left: windowWidth / 2 - $musicCircle.width() / 2 + ($musicCircle.width() - $albumCover.width()) / 2  + PROGRESS_CIRCLE_BORDER});
 
     var $rhythmCircle = $("div.musicCircle div.rhythmCircle");
 
@@ -66,8 +70,6 @@ function playerControl($playerDiv, $drawSvg) {
     });
 
     var $progressFilter = $("div.musicCircle div#playerControl").find("filter:first-child");
-
-    console.log($progressFilter[0]);
 
     $progressFilter[0].setAttribute("width", "200%");
     $progressFilter[0].setAttribute("height", "200%");
