@@ -6,31 +6,30 @@ var windowHeight = window.innerHeight,
 $(document).ready(function () {
     var $window = $(window),
         $musicCircle = $(".musicCircle"),
-        $animeBar = $(".animeBar");
+        $animeBar = $(".animeBar"),
+        $playerDiv = $("#playerControl");
+
+    var $drawSvg = SVG('playerControl')
+        .size($musicCircle.height() + PROGRESS_START_HEIGHT, $musicCircle.width() + PROGRESS_CIRCLE_RADIUS * 2);
 
     centerMusicCircle($musicCircle);
     animeBar($musicCircle, $animeBar);
+    playerControl($playerDiv, $drawSvg);
 
     $window.resize(function () {
         windowHeight = $window.height();
         windowWidth = $window.width();
         centerMusicCircle($musicCircle);
-        //animeBar($musicCircle, $animeBar);
+        animeBar($musicCircle, $animeBar);
+        playerControl($playerDiv, $drawSvg);
     })
 
 });
 
 function centerMusicCircle($musicCircle) {
-    if (windowHeight > 740) {
-        console.log("CHANGE");
-        $musicCircle.css({top: windowHeight / 2 - $musicCircle.height() / 2 - MUSIC_CIRCLE_OFFSET,
-            left: windowWidth / 2 - $musicCircle.width() / 2});
-    } else {
-        console.log(windowHeight);
-        $musicCircle.css({top: windowHeight / 2 - $musicCircle.height() / 2,
-            left: windowWidth / 2 - $musicCircle.width() / 2});
-    }
-
+    console.log("CHANGE");
+    $musicCircle.css({top: windowHeight / 2 - $musicCircle.height() / 2 - MUSIC_CIRCLE_OFFSET,
+        left: windowWidth / 2 - $musicCircle.width() / 2});
 
     var $rhythmCircle = $("div.musicCircle div.rhythmCircle");
 
@@ -43,13 +42,35 @@ function centerMusicCircle($musicCircle) {
 function animeBar($musicCircle, $animeBar) {
     $animeBar.css({top: $musicCircle.height() / 2 - $animeBar.height() / 2});
 
-    var $animeName = $(".animeBar p.animeName");
+    var $animeName = $(".animeBar p.songTimer");
 
     $animeName.css({lineHeight: $animeBar.height() + "px"});
-    if ($animeName.text().length > 10) {
-        $animeName.css({fontSize: 2 + "rem", letterSpacing: 0})
-    } else if ($animeName.text().length < 5) {
-        $animeName.css({letterSpacing: 1 + "rem"})
-    }
 }
 
+function playerControl($playerDiv, $drawSvg) {
+    var progress_start = $drawSvg.rect(PROGRESS_START_WIDTH, PROGRESS_START_HEIGHT).fill('white');
+    var progress_circle = $drawSvg.circle(PROGRESS_CIRCLE_RADIUS*2).fill('#e1e1e1');
+
+    var startRecPosnX = $drawSvg.width() / 2 - PROGRESS_START_WIDTH / 2;
+    var progressCirclePosnX = $drawSvg.width() / 2;
+    var progressCirclePosnY = PROGRESS_CIRCLE_RADIUS + (PROGRESS_START_HEIGHT - PROGRESS_CIRCLE_RADIUS*2)/2;
+
+    $playerDiv.css({"top": -(PROGRESS_START_HEIGHT/2), "left": -(PROGRESS_CIRCLE_RADIUS)});
+
+    progress_circle.cx(progressCirclePosnX).cy(progressCirclePosnY);
+    progress_start.x(startRecPosnX).y(0);
+
+    progress_circle.filter(function (add) {
+        var blur = add.offset(0).gaussianBlur(2);
+        add.blend(add.source, blur)
+    });
+
+    var $progressFilter = $("div.musicCircle div#playerControl").find("filter:first-child");
+
+    console.log($progressFilter[0]);
+
+    $progressFilter[0].setAttribute("width", "200%");
+    $progressFilter[0].setAttribute("height", "200%");
+    $progressFilter[0].setAttribute("x", "-40%");
+    $progressFilter[0].setAttribute("y", "-40%");
+}

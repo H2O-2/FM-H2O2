@@ -23,10 +23,10 @@ html, body {
 
 div.musicCircle {
   position: absolute;
-  border: 2px solid rgba(219, 133, 255, 0.5);
+  border: 2px solid rgba(219, 133, 255, 0.6);
   border-radius: 50%;
-  width: 45rem;
-  height: 45rem;
+  width: 42rem;
+  height: 42rem;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-shadow: 0 0 .5rem 0.1rem #e1a8ff, 0 0 .5rem 0.1rem #e1a8ff inset;
@@ -34,10 +34,10 @@ div.musicCircle {
 
 div.musicCircle div.rhythmCircle {
   position: absolute;
-  border: 2px solid rgba(219, 133, 255, 0.5);
+  border: 2px solid rgba(219, 133, 255, 1);
   border-radius: 50%;
-  width: 50rem;
-  height: 50rem;
+  width: 47rem;
+  height: 47rem;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-shadow: 0 0 .5rem 0.1rem #e1a8ff, 0 0 .5rem 0.1rem #e1a8ff inset;
@@ -49,72 +49,55 @@ div.musicCircle div.rhythmCircle {
   position: relative;
   border-radius: .5rem;
   width: 100%;
-  height: 4.5rem;
+  height: 4rem;
   background-color: rgba(146,146,146,0.5);
   box-shadow: 0 .05rem 2rem .1rem #464646;
+  z-index: -1;
 }
 
-div.musicCircle p.animeName {
+div.musicCircle p.songTimer {
   text-align: center;
-  font-size: 3.5rem;
+  font-size: 2.2rem;
   margin: 0;
   color: #eaeaea;
   text-shadow: 0 0 .5rem white, 0 0 .3rem #def1f5;
   z-index: 100;
   padding-left: 1.5rem;
+  letter-spacing: .4rem;
 }
 
 div.musicCircle div.songInfo {
   position: relative;
   color: white;
-  letter-spacing: 0.3rem;
+  letter-spacing: 0.2rem;
 }
 
 div.musicCircle div#songTitle {
-  top: 17.5%;
-  left: 10%;
+  top: 7.5rem;
+  left: 4.5rem;
   float: left;
-  font-size: 2.8rem;
+  font-size: 2.5rem;
   text-shadow: 0 0 .5rem $theme, 0 0 .3rem $theme;
 }
 
 div.musicCircle div#singer {
   float: right;
-  top: 25rem;
-  right: 4.5rem;
   font-size: 1.5rem;
+  top: 24rem;
+  right: 4.5rem;
   text-shadow: 0 0 .5rem $theme, 0 0 .3rem $theme;
 }
 
 /******************* Player Control *******************/
 
-div.playerControl {
+svg {
   position: absolute;
 }
 
-div.playerControl div.buttons div {
+div#playerControl {
   position: relative;
-  display: inline-block;
-  border: 2px solid rgba(255, 255, 255, .6);
-  border-radius: 50%;
-  width: 3.8rem;
-  height: 3.8rem;
-  text-align: center;
-  line-height: 3.8rem;
 }
 
-div.playerControl div#playBtn {
-  width: 5rem;
-  height: 5rem;
-  //line-height: 5rem;
-}
-
-div.playerControl div.buttons div i {
-  position: relative;
-  color: rgba(255, 255, 255, .6);
-  //line-height: 3.8rem;
-}
-
-div.playerControl div#playBtn {
-
+div#playerControl svg circle {
+  opacity: .8;
 }

@@ -2,38 +2,32 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Project FM@H2O2</title>
     <link rel="stylesheet" type="text/css" href="bower_components/normalize-css/normalize.css">
     <link rel="stylesheet" type="text/css" href="bower_components/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="styles/main.css">
+    <script src="bower_components/svg.js/dist/svg.min.js"></script>
+    <script src="bower_components/svg.filter.js/dist/svg.filter.min.js"></script>
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="scripts/constants.js"></script>
     <script src="scripts/visual.js"></script>
 </head>
 <body>
     <div class="jumbotron bg"></div>
+    <svg id="playerControl_back" xmlns="http://www.w3.org/2000/svg" width="520" height="520" style="top: 60px; left: 315.5px; display: none;">
+        <rect x="257" y="10" width="6" height="24" fill="transparent"></rect>
+        <circle cx="50%" cy="8" r="8" fill="white"></circle>
+    </svg>
     <div class="musicCircle">
+        <div id="playerControl"></div>
         <div class="rhythmCircle"></div>
         <div class="animeBar">
-            <p class="animeName">K-ON</p>
+            <p class="songTimer"><span id="currentTime">00:30</span> / <span id="totalTime">05:40</span></p>
         </div>
         <div id="songTitle" class="songInfo"><p>NO, Thank You!</p></div>
-        <div id="singer" class="songInfo"><p>-放課後ティータイム</p></div>
-    </div>
-    <div class="playerControl">
-        <div class="buttons">
-            <div id="playBtn">
-                <i class="fa fa-3x fa-play"></i>
-            </div>
-            <div id="forwardBtn">
-                <i class="fa fa-2x fa-forward"></i>
-            </div>
-            <div id="backwardBtn">
-                <i class="fa fa-2x fa-backward"></i>
-            </div>
-        </div>
-        <div class="progressBar"></div>
+        <div id="singer" class="songInfo">&ndash; 放課後ティータイム</div>
     </div>
 </body>
 </html>
