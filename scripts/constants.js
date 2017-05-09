@@ -1,6 +1,6 @@
 "use strict";
 
-var MUSIC_CIRCLE_OFFSET = window.innerWidth / 35;
+var MUSIC_CIRCLE_OFFSET = window.innerWidth / 25;
 var PROGRESS_CIRCLE_BORDER = 2;
 var PROGRESS_CIRCLE_RADIUS = 8;
 var PROGRESS_START_HEIGHT = 24;

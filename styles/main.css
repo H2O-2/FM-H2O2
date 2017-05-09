@@ -12,10 +12,17 @@ html, body {
   min-width: 100%;
   min-height: 100%;
   margin-bottom: 0;
-  opacity: 0.4;
+  opacity: 0.5;
   z-index: -9999; }
 
 /******************* Music Circle *******************/
+div#showAlbum {
+  position: absolute;
+  width: 33rem;
+  height: 20rem;
+  opacity: 0;
+  z-index: 1000; }
+
 div#albumCover {
   position: absolute;
   border-radius: 50%;
@@ -25,7 +32,8 @@ div#albumCover {
   -moz-box-sizing: border-box;
   box-shadow: 0 0 1rem 0.5rem #0e0e0e, 0 0 1rem 0.5rem #0e0e0e inset;
   background: black url("../img/noThankYou.jpg") no-repeat;
-  background-size: cover; }
+  background-size: cover;
+  opacity: 0; }
 
 div#albumCover div#pause {
   background: rgba(0, 0, 0, 0.25);
@@ -54,7 +62,8 @@ div.musicCircle div.rhythmCircle {
   -moz-box-sizing: border-box;
   box-shadow: 0 0 .5rem 0.1rem #e1a8ff, 0 0 .5rem 0.1rem #e1a8ff inset;
   mix-blend-mode: screen;
-  opacity: .5; }
+  opacity: .5;
+  z-index: -1; }
 
 .musicCircle div.animeBar {
   position: relative;
@@ -85,23 +94,38 @@ div.musicCircle div#songTitle {
   left: 4.5rem;
   float: left;
   font-size: 2.5rem;
-  text-shadow: 0 0 0.5rem #d78bff, 0 0 0.3rem #d78bff; }
+  text-shadow: 0 0 0.5rem #d78bff, 0 0 0.3rem #d78bff;
+  z-index: -1; }
 
 div.musicCircle div#singer {
   float: right;
   font-size: 1.5rem;
   top: 24rem;
   right: 4.5rem;
-  text-shadow: 0 0 0.5rem #d78bff, 0 0 0.3rem #d78bff; }
+  text-shadow: 0 0 0.5rem #d78bff, 0 0 0.3rem #d78bff;
+  z-index: -1; }
 
 /******************* Player Control *******************/
 svg {
   position: absolute; }
 
 div#playerControl {
-  position: relative; }
+  position: relative;
+  z-index: 10; }
 
 div#playerControl svg circle {
   opacity: .8; }
+
+div#playerControl svg circle:hover {
+  cursor: pointer; }
+
+/******************* Bottom *******************/
+span#albumName {
+  position: absolute;
+  color: #FFFFFF;
+  letter-spacing: .3rem;
+  font-size: 1.6rem;
+  display: none;
+  opacity: 0; }
 
 /*# sourceMappingURL=main.css.map */

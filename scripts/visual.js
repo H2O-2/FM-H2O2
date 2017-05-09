@@ -6,34 +6,59 @@ var windowHeight = window.innerHeight,
 $(document).ready(function () {
     var $window = $(window),
         $musicCircle = $(".musicCircle"),
+        $rhythmCircle = $(".rhythmCircle"),
+        $background = $("#bg"),
+        $showAlbum = $("#showAlbum"),
         $albumCover = $("#albumCover"),
         $animeBar = $(".animeBar"),
-        $playerDiv = $("#playerControl");
+        $songInfo = $(".songInfo"),
+        $playerDiv = $("#playerControl"),
+        $albumName = $("#albumName");
 
     var $drawSvg = SVG('playerControl')
         .size($musicCircle.height() + PROGRESS_START_HEIGHT, $musicCircle.width() + PROGRESS_CIRCLE_RADIUS * 2);
 
-    centerMusicCircle($musicCircle, $albumCover);
+    centerMusicCircle($musicCircle, $albumCover, $showAlbum);
     animeBar($musicCircle, $animeBar);
     playerControl($playerDiv, $drawSvg);
+
+    $showAlbum.hover(function () {
+        $background.delay(300).fadeTo(400, .15, "swing");
+        $albumCover.show().delay(300).fadeTo(300, 1, "swing");
+        $albumName.show().delay(300).fadeTo(400, 1, "swing");
+        $songInfo.delay(200).fadeOut();
+    }, function () {
+        $background.delay(300).fadeTo(400, .4, "swing");
+        $albumCover.delay(300).fadeTo(300, 0, "swing").hide(0);
+        $albumName.delay(300).fadeTo(400, 0, "swing").hide(0);
+        $songInfo.delay(200).fadeIn();
+    });
+
+    $albumName.css({top: $rhythmCircle.height() + (windowHeight - $rhythmCircle.height()) / 2,
+        left: windowWidth / 2 - $albumName.width() / 2});
 
     $window.resize(function () {
         windowHeight = $window.height();
         windowWidth = $window.width();
-        centerMusicCircle($musicCircle, $albumCover);
+        centerMusicCircle($musicCircle, $albumCover, $showAlbum);
         animeBar($musicCircle, $animeBar);
-        playerControl($playerDiv, $drawSvg);
+
+        $albumName.css({top: $rhythmCircle.height() + (windowHeight - $rhythmCircle.height()) / 2,
+            left: windowWidth / 2 - $albumName.width() / 2});
     })
 
 });
 
-function centerMusicCircle($musicCircle, $albumCover) {
+function centerMusicCircle($musicCircle, $albumCover, $showAlbum) {
     console.log("CHANGE");
     $musicCircle.css({top: windowHeight / 2 - $musicCircle.height() / 2 - MUSIC_CIRCLE_OFFSET,
         left: windowWidth / 2 - $musicCircle.width() / 2});
     $albumCover.css({top: windowHeight / 2 - $musicCircle.height() / 2 -
                         MUSIC_CIRCLE_OFFSET + ($musicCircle.height() - $albumCover.height()) / 2 + PROGRESS_CIRCLE_BORDER,
         left: windowWidth / 2 - $musicCircle.width() / 2 + ($musicCircle.width() - $albumCover.width()) / 2  + PROGRESS_CIRCLE_BORDER});
+    $showAlbum.css({top: windowHeight / 2 - $musicCircle.height() / 2 -
+    MUSIC_CIRCLE_OFFSET + ($musicCircle.height() - $showAlbum.height()) / 2 + PROGRESS_CIRCLE_BORDER,
+        left: windowWidth / 2 - $musicCircle.width() / 2 + ($musicCircle.width() - $showAlbum.width()) / 2  + PROGRESS_CIRCLE_BORDER});
 
     var $rhythmCircle = $("div.musicCircle div.rhythmCircle");
 
