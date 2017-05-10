@@ -16,19 +16,19 @@ $(document).ready(function () {
         $albumName = $("#albumName");
 
     var $drawSvg = SVG('playerControl')
-        .size($musicCircle.height() + PROGRESS_START_HEIGHT, $musicCircle.width() + PROGRESS_CIRCLE_RADIUS * 2);
+        .size($musicCircle.width() + PROGRESS_CIRCLE_RADIUS * 4, $musicCircle.height() + PROGRESS_START_HEIGHT);
 
     centerMusicCircle($musicCircle, $albumCover, $showAlbum);
     animeBar($musicCircle, $animeBar);
     playerControl($playerDiv, $drawSvg);
 
     $showAlbum.hover(function () {
-        $background.delay(300).fadeTo(400, .15, "swing");
+        $background.delay(300).fadeTo(400, .1, "swing");
         $albumCover.show().delay(300).fadeTo(300, 1, "swing");
         $albumName.show().delay(300).fadeTo(400, 1, "swing");
-        $songInfo.delay(200).fadeOut();
+        $songInfo.delay(300).fadeOut();
     }, function () {
-        $background.delay(300).fadeTo(400, .4, "swing");
+        $background.delay(300).fadeTo(400, .5, "swing");
         $albumCover.delay(300).fadeTo(300, 0, "swing").hide(0);
         $albumName.delay(300).fadeTo(400, 0, "swing").hide(0);
         $songInfo.delay(200).fadeIn();
@@ -84,7 +84,7 @@ function playerControl($playerDiv, $drawSvg) {
     var progressCirclePosnX = $drawSvg.width() / 2;
     var progressCirclePosnY = PROGRESS_CIRCLE_RADIUS + (PROGRESS_START_HEIGHT - PROGRESS_CIRCLE_RADIUS*2)/2;
 
-    $playerDiv.css({"top": -(PROGRESS_START_HEIGHT/2), "left": -(PROGRESS_CIRCLE_RADIUS)});
+    $playerDiv.css({"top": -(PROGRESS_START_HEIGHT/2), "left": -(PROGRESS_CIRCLE_RADIUS*2)});
 
     progress_circle.cx(progressCirclePosnX).cy(progressCirclePosnY);
     progress_start.x(startRecPosnX).y(0);

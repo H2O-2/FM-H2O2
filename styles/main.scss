@@ -40,6 +40,7 @@ div#albumCover {
   background: rgb(0,0,0) url("../img/noThankYou.jpg") no-repeat;
   background-size: cover;
   opacity: 0;
+  z-index: 2;
 }
 
 div#albumCover div#pause {
@@ -82,7 +83,7 @@ div.musicCircle div.rhythmCircle {
   height: 4rem;
   background-color: rgba(146,146,146,0.5);
   box-shadow: 0 .05rem 2rem .1rem #464646;
-  z-index: -1;
+  z-index: 0;
 }
 
 div.musicCircle p.songTimer {
@@ -108,7 +109,7 @@ div.musicCircle div#songTitle {
   float: left;
   font-size: 2.5rem;
   text-shadow: 0 0 .5rem $theme, 0 0 .3rem $theme;
-  z-index: -1;
+  z-index: 0;
 }
 
 div.musicCircle div#singer {
@@ -117,7 +118,7 @@ div.musicCircle div#singer {
   top: 24rem;
   right: 4.5rem;
   text-shadow: 0 0 .5rem $theme, 0 0 .3rem $theme;
-  z-index: -1;
+  z-index: 0;
 }
 
 /******************* Player Control *******************/
