@@ -22,6 +22,13 @@ $(document).ready(function () {
     animeBar($musicCircle, $animeBar);
     playerControl($playerDiv, $drawSvg);
 
+    $('div#playerControl svg circle').draggable().bind('drag', function(event, ui){
+            // update coordinates manually, since top/left style props don't work on SVG
+            event.target.setAttribute('cx', ui.position.left - $playerDiv.offset().left + DRAG_CONTROL_OFFSET);
+            event.target.setAttribute('cy', ui.position.top - $playerDiv.offset().top + DRAG_CONTROL_OFFSET);
+            console.log(ui.position.left, $playerDiv.offset().left)
+        });
+
     $showAlbum.hover(function () {
         $background.delay(300).fadeTo(400, .1, "swing");
         $albumCover.show().delay(300).fadeTo(300, 1, "swing");
