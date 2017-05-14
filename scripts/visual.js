@@ -5,13 +5,13 @@ var windowHeight = window.innerHeight,
 
 $(document).ready(function () {
     var $window = $(window),
-        $musicCircle = $(".musicCircle"),
-        $rhythmCircle = $(".rhythmCircle"),
+        $musicCircle = $(".musicCircle").eq(0),
+        $rhythmCircle = $(".rhythmCircle").eq(0),
         $background = $("#bg"),
         $showAlbum = $("#showAlbum"),
         $albumCover = $("#albumCover"),
-        $animeBar = $(".animeBar"),
-        $songInfo = $(".songInfo"),
+        $animeBar = $(".animeBar").eq(0),
+        $songInfo = $(".songInfo").eq(0),
         $playerDiv = $("#playerControl"),
         $albumName = $("#albumName");
 
@@ -22,11 +22,14 @@ $(document).ready(function () {
     animeBar($musicCircle, $animeBar);
     playerControl($playerDiv, $drawSvg);
 
-    $('div#playerControl svg circle').draggable().bind('drag', function(event, ui){
-            // update coordinates manually, since top/left style props don't work on SVG
+    var $progressCircle = $('div#playerControl svg circle').eq(0);
+
+    console.log($progressCircle);
+
+    $progressCircle.draggable().bind('drag', function(event, ui){
             event.target.setAttribute('cx', ui.position.left - $playerDiv.offset().left + DRAG_CONTROL_OFFSET);
             event.target.setAttribute('cy', ui.position.top - $playerDiv.offset().top + DRAG_CONTROL_OFFSET);
-            console.log(ui.position.left, $playerDiv.offset().left)
+            console.log(ui.position.left, ui.position.top)
         });
 
     $showAlbum.hover(function () {
