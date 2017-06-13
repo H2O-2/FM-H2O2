@@ -3,6 +3,20 @@
 var windowHeight = window.innerHeight,
     windowWidth = window.innerWidth;
 
+
+function playerControlRotate(refElement, x, y, control) {
+    var posnX = x - refElement.offset().left - refElement.width() / 2,
+        posnY = -(y - refElement.offset().top - refElement.height() / 2);
+
+    var rotateDegree = 90 - (Math.atan2(posnY, posnX) * (180/Math.PI));
+
+    control.css({'transform': 'rotate(' + rotateDegree + 'deg)'});
+    $('body').on('mouseup', function (e) {
+        $('body').unbind('mousemove');
+    });
+}
+
+
 $(document).ready(function () {
     var $window = $(window),
         $musicCircle = $(".musicCircle").eq(0),
@@ -23,6 +37,13 @@ $(document).ready(function () {
     playerControl($playerDiv, $drawSvg);
 
     var $progressCircle = $('div#playerControl svg circle').eq(0);
+    var transformData = ($musicCircle.width() / 2 + $progressCircle.width() / 2 + 18 + 'px') + ' ' +
+        ($musicCircle.width() / 2 + $progressCircle.width() / 2 + 14 + 'px');
+
+    console.log('transformData: ', transformData);
+    $progressCircle.css({'transform-origin': transformData});
+/*
+
 
     console.log($progressCircle);
 
@@ -31,6 +52,13 @@ $(document).ready(function () {
             event.target.setAttribute('cy', ui.position.top - $playerDiv.offset().top + DRAG_CONTROL_OFFSET);
             console.log(ui.position.left, ui.position.top)
         });
+*/
+
+    $progressCircle.on('mousedown', function (e) {
+        $('body').on('mousemove', function (e) {
+            playerControlRotate($musicCircle, e.pageX, e.pageY, $progressCircle);
+        });
+    });
 
     $showAlbum.hover(function () {
         $background.delay(300).fadeTo(400, .1, "swing");
