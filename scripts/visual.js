@@ -20,6 +20,7 @@ function playerControlRotate(refElement, x, y, control) {
 $(document).ready(function () {
     var $window = $(window),
         $musicCircle = $(".musicCircle").eq(0),
+        $musicCirclePlayed = $('#musicCirclePlayed'),
         $rhythmCircle = $(".rhythmCircle").eq(0),
         $background = $("#bg"),
         $showAlbum = $("#showAlbum"),
@@ -32,13 +33,16 @@ $(document).ready(function () {
     var $drawSvg = SVG('playerControl')
         .size($musicCircle.width() + PROGRESS_CIRCLE_RADIUS * 4, $musicCircle.height() + PROGRESS_START_HEIGHT);
 
-    centerMusicCircle($musicCircle, $albumCover, $showAlbum);
+    centerMusicCircle($musicCircle);
+    centerMusicCircle($musicCirclePlayed);
+    placeAlbum($musicCircle, $albumCover, $showAlbum);
+    centerRhythmCircle($musicCircle);
     animeBar($musicCircle, $animeBar);
     playerControl($playerDiv, $drawSvg);
 
     var $progressCircle = $('div#playerControl svg circle').eq(0);
-    var transformData = ($musicCircle.width() / 2 + $progressCircle.width() / 2 + 18 + 'px') + ' ' +
-        ($musicCircle.width() / 2 + $progressCircle.width() / 2 + 14 + 'px');
+    var transformData = ($musicCircle.width() / 2 + $progressCircle.width() / 2 + 15 + 'px') + ' ' +
+        ($musicCircle.width() / 2 + $progressCircle.width() / 2 + 13 + 'px');
 
     console.log('transformData: ', transformData);
     $progressCircle.css({'transform-origin': transformData});
@@ -78,7 +82,10 @@ $(document).ready(function () {
     $window.resize(function () {
         windowHeight = $window.height();
         windowWidth = $window.width();
-        centerMusicCircle($musicCircle, $albumCover, $showAlbum);
+        centerMusicCircle($musicCircle);
+        centerMusicCircle($musicCirclePlayed);
+        placeAlbum($musicCircle, $albumCover, $showAlbum);
+        centerRhythmCircle($musicCircle);
         animeBar($musicCircle, $animeBar);
 
         $albumName.css({top: $rhythmCircle.height() + (windowHeight - $rhythmCircle.height()) / 2,
@@ -87,24 +94,33 @@ $(document).ready(function () {
 
 });
 
-function centerMusicCircle($musicCircle, $albumCover, $showAlbum) {
+function centerMusicCircle($musicCircle) {
+
     console.log("CHANGE");
     $musicCircle.css({top: windowHeight / 2 - $musicCircle.height() / 2 - MUSIC_CIRCLE_OFFSET,
         left: windowWidth / 2 - $musicCircle.width() / 2});
+
+}
+
+function placeAlbum($musicCircle, $albumCover, $showAlbum) {
+
     $albumCover.css({top: windowHeight / 2 - $musicCircle.height() / 2 -
-                        MUSIC_CIRCLE_OFFSET + ($musicCircle.height() - $albumCover.height()) / 2 + PROGRESS_CIRCLE_BORDER,
+    MUSIC_CIRCLE_OFFSET + ($musicCircle.height() - $albumCover.height()) / 2 + PROGRESS_CIRCLE_BORDER,
         left: windowWidth / 2 - $musicCircle.width() / 2 + ($musicCircle.width() - $albumCover.width()) / 2  + PROGRESS_CIRCLE_BORDER});
     $showAlbum.css({top: windowHeight / 2 - $musicCircle.height() / 2 -
     MUSIC_CIRCLE_OFFSET + ($musicCircle.height() - $showAlbum.height()) / 2 + PROGRESS_CIRCLE_BORDER,
         left: windowWidth / 2 - $musicCircle.width() / 2 + ($musicCircle.width() - $showAlbum.width()) / 2  + PROGRESS_CIRCLE_BORDER});
 
+
+}
+
+function centerRhythmCircle($musicCircle) {
     var $rhythmCircle = $("div.musicCircle div.rhythmCircle");
 
     $rhythmCircle.css({top: ($musicCircle.height() - $rhythmCircle.height()) / 2,
         left: ($musicCircle.width() - $rhythmCircle.width()) / 2});
-
-
 }
+
 
 function animeBar($musicCircle, $animeBar) {
     $animeBar.css({top: $musicCircle.height() / 2 - $animeBar.height() / 2});
