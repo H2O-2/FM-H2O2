@@ -16,84 +16,6 @@ function playerControlRotate(refElement, x, y, control) {
     });
 }
 
-
-$(document).ready(function () {
-    var $window = $(window),
-        $musicCircle = $(".musicCircle").eq(0),
-        $musicCirclePlayed = $('#musicCirclePlayed'),
-        $rhythmCircle = $(".rhythmCircle").eq(0),
-        $background = $("#bg"),
-        $showAlbum = $("#showAlbum"),
-        $albumCover = $("#albumCover"),
-        $animeBar = $(".animeBar").eq(0),
-        $songInfo = $(".songInfo").eq(0),
-        $playerDiv = $("#playerControl"),
-        $albumName = $("#albumName");
-
-    var $drawSvg = SVG('playerControl')
-        .size($musicCircle.width() + PROGRESS_CIRCLE_RADIUS * 4, $musicCircle.height() + PROGRESS_START_HEIGHT);
-
-    centerMusicCircle($musicCircle);
-    centerMusicCircle($musicCirclePlayed);
-    placeAlbum($musicCircle, $albumCover, $showAlbum);
-    centerRhythmCircle($musicCircle);
-    animeBar($musicCircle, $animeBar);
-    playerControl($playerDiv, $drawSvg);
-
-    var $progressCircle = $('div#playerControl svg circle').eq(0);
-    var transformData = ($musicCircle.width() / 2 + $progressCircle.width() / 2 + 15 + 'px') + ' ' +
-        ($musicCircle.width() / 2 + $progressCircle.width() / 2 + 13 + 'px');
-
-    console.log('transformData: ', transformData);
-    $progressCircle.css({'transform-origin': transformData});
-/*
-
-
-    console.log($progressCircle);
-
-    $progressCircle.draggable().bind('drag', function(event, ui){
-            event.target.setAttribute('cx', ui.position.left - $playerDiv.offset().left + DRAG_CONTROL_OFFSET);
-            event.target.setAttribute('cy', ui.position.top - $playerDiv.offset().top + DRAG_CONTROL_OFFSET);
-            console.log(ui.position.left, ui.position.top)
-        });
-*/
-
-    $progressCircle.on('mousedown', function (e) {
-        $('body').on('mousemove', function (e) {
-            playerControlRotate($musicCircle, e.pageX, e.pageY, $progressCircle);
-        });
-    });
-
-    $showAlbum.hover(function () {
-        $background.delay(300).fadeTo(400, .1, "swing");
-        $albumCover.show().delay(300).fadeTo(300, 1, "swing");
-        $albumName.show().delay(300).fadeTo(400, 1, "swing");
-        $songInfo.delay(300).fadeOut();
-    }, function () {
-        $background.delay(300).fadeTo(400, .5, "swing");
-        $albumCover.delay(300).fadeTo(300, 0, "swing").hide(0);
-        $albumName.delay(300).fadeTo(400, 0, "swing").hide(0);
-        $songInfo.delay(200).fadeIn();
-    });
-
-    $albumName.css({top: $rhythmCircle.height() + (windowHeight - $rhythmCircle.height()) / 2,
-        left: windowWidth / 2 - $albumName.width() / 2});
-
-    $window.resize(function () {
-        windowHeight = $window.height();
-        windowWidth = $window.width();
-        centerMusicCircle($musicCircle);
-        centerMusicCircle($musicCirclePlayed);
-        placeAlbum($musicCircle, $albumCover, $showAlbum);
-        centerRhythmCircle($musicCircle);
-        animeBar($musicCircle, $animeBar);
-
-        $albumName.css({top: $rhythmCircle.height() + (windowHeight - $rhythmCircle.height()) / 2,
-            left: windowWidth / 2 - $albumName.width() / 2});
-    })
-
-});
-
 function centerMusicCircle($musicCircle) {
 
     console.log("CHANGE");
@@ -155,3 +77,70 @@ function playerControl($playerDiv, $drawSvg) {
     $progressFilter[0].setAttribute("x", "-40%");
     $progressFilter[0].setAttribute("y", "-40%");
 }
+
+$(document).ready(function () {
+    var $window = $(window),
+        $musicCircle = $(".musicCircle").eq(0),
+        $musicCirclePlayed = $('#musicCirclePlayed'),
+        $rhythmCircle = $(".rhythmCircle").eq(0),
+        $background = $("#bg"),
+        $showAlbum = $("#showAlbum"),
+        $albumCover = $("#albumCover"),
+        $animeBar = $(".animeBar").eq(0),
+        $songInfo = $(".songInfo").eq(0),
+        $playerDiv = $("#playerControl"),
+        $albumName = $("#albumName");
+
+    var $drawSvg = SVG('playerControl')
+        .size($musicCircle.width() + PROGRESS_CIRCLE_RADIUS * 4, $musicCircle.height() + PROGRESS_START_HEIGHT);
+
+    centerMusicCircle($musicCircle);
+    centerMusicCircle($musicCirclePlayed);
+    placeAlbum($musicCircle, $albumCover, $showAlbum);
+    centerRhythmCircle($musicCircle);
+    animeBar($musicCircle, $animeBar);
+    playerControl($playerDiv, $drawSvg);
+
+    var $progressCircle = $('div#playerControl svg circle').eq(0);
+    var transformData = ($musicCircle.width() / 2 + $progressCircle.width() / 2 + 15 + 'px') + ' ' +
+        ($musicCircle.width() / 2 + $progressCircle.width() / 2 + 13 + 'px');
+
+    console.log('transformData: ', transformData);
+    $progressCircle.css({'transform-origin': transformData});
+    $progressCircle.on('mousedown', function (e) {
+        $('body').on('mousemove', function (e) {
+            playerControlRotate($musicCircle, e.pageX, e.pageY, $progressCircle);
+        });
+    });
+
+    $showAlbum.hover(function () {
+        $background.delay(300).fadeTo(400, .1, "swing");
+        $albumCover.show().delay(300).fadeTo(300, 1, "swing");
+        $albumName.show().delay(300).fadeTo(400, 1, "swing");
+        $songInfo.delay(300).fadeOut();
+    }, function () {
+        $background.delay(300).fadeTo(400, .5, "swing");
+        $albumCover.delay(300).fadeTo(300, 0, "swing").hide(0);
+        $albumName.delay(300).fadeTo(400, 0, "swing").hide(0);
+        $songInfo.delay(200).fadeIn();
+    });
+
+    $albumName.css({top: $rhythmCircle.height() + (windowHeight - $rhythmCircle.height()) / 2,
+        left: windowWidth / 2 - $albumName.width() / 2});
+
+    $window.resize(function () {
+        windowHeight = $window.height();
+        windowWidth = $window.width();
+        centerMusicCircle($musicCircle);
+        centerMusicCircle($musicCirclePlayed);
+        placeAlbum($musicCircle, $albumCover, $showAlbum);
+        centerRhythmCircle($musicCircle);
+        animeBar($musicCircle, $animeBar);
+
+        $albumName.css({top: $rhythmCircle.height() + (windowHeight - $rhythmCircle.height()) / 2,
+            left: windowWidth / 2 - $albumName.width() / 2});
+    })
+
+});
+
+
