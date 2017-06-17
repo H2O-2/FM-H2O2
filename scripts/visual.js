@@ -102,10 +102,11 @@ $(document).ready(function () {
     playerControl($playerDiv, $drawSvg);
 
     var $progressCircle = $('div#playerControl svg circle').eq(0);
-    var transformData = ($musicCircle.width() / 2 + $progressCircle.width() / 2 + 15 + 'px') + ' ' +
-        ($musicCircle.width() / 2 + $progressCircle.width() / 2 + 13 + 'px');
+
+    var transformData = ($drawSvg.width() / 2 + 1) + 'px' + ' ' + ($drawSvg.height() / 2 + 1) + 'px';
 
     console.log('transformData: ', transformData);
+    console.log($drawSvg.width(), $progressCircle.width());
     $progressCircle.css({'transform-origin': transformData});
     $progressCircle.on('mousedown', function (e) {
         $('body').on('mousemove', function (e) {
@@ -139,8 +140,7 @@ $(document).ready(function () {
 
         $albumName.css({top: $rhythmCircle.height() + (windowHeight - $rhythmCircle.height()) / 2,
             left: windowWidth / 2 - $albumName.width() / 2});
-    })
-
+    });
 });
 
 
