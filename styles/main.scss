@@ -5,6 +5,7 @@ html, body {
   font-weight: 100;
   font-size: 12px;
   background: #000;
+  height: 0;
 }
 
 .jumbotron {
@@ -60,6 +61,10 @@ div.musicCircle {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-shadow: 0 0 .5rem 0.1rem #e1a8ff, 0 0 .5rem 0.1rem #e1a8ff inset;
+}
+
+div#musicCircleToPlay {
+  box-shadow: none;
 }
 
 div.musicCircle div.rhythmCircle {
@@ -134,7 +139,7 @@ div#playerControl {
 }
 
 div#playerControl svg circle {
-  opacity: .8;
+  //opacity: .8;
 }
 
 div#playerControl svg circle:hover {

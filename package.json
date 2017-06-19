@@ -1,0 +1,31 @@
+{
+  "name": "fm-h2o2",
+  "version": "1.0.0",
+  "description": "FM@H2O2",
+  "main": "index.js",
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "font-awesome": "^4.7.0",
+    "jquery": "^3.2.1",
+    "normalize": "^0.3.1",
+    "normalize.css": "^7.0.0",
+    "svg.filter.js": "^2.0.2",
+    "svg.js": "^2.6.2"
+  },
+  "devDependencies": {
+    "webpack": "^2.6.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/H2O-2/FM-H2O2.git"
+  },
+  "author": "H2O2",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/H2O-2/FM-H2O2/issues"
+  },
+  "homepage": "https://github.com/H2O-2/FM-H2O2#readme"
+}

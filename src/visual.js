@@ -4,18 +4,6 @@ var windowHeight = window.innerHeight,
     windowWidth = window.innerWidth;
 
 
-function playerControlRotate(refElement, x, y, control) {
-    var posnX = x - refElement.offset().left - refElement.width() / 2,
-        posnY = -(y - refElement.offset().top - refElement.height() / 2);
-
-    var rotateDegree = 90 - (Math.atan2(posnY, posnX) * (180/Math.PI));
-
-    control.css({'transform': 'rotate(' + rotateDegree + 'deg)'});
-    $('body').on('mouseup', function (e) {
-        $('body').unbind('mousemove');
-    });
-}
-
 function centerMusicCircle($musicCircle) {
 
     console.log("CHANGE");
@@ -32,7 +20,6 @@ function placeAlbum($musicCircle, $albumCover, $showAlbum) {
     $showAlbum.css({top: windowHeight / 2 - $musicCircle.height() / 2 -
     MUSIC_CIRCLE_OFFSET + ($musicCircle.height() - $showAlbum.height()) / 2 + PROGRESS_CIRCLE_BORDER,
         left: windowWidth / 2 - $musicCircle.width() / 2 + ($musicCircle.width() - $showAlbum.width()) / 2  + PROGRESS_CIRCLE_BORDER});
-
 
 }
 
@@ -52,7 +39,7 @@ function animeBar($musicCircle, $animeBar) {
     $animeName.css({lineHeight: $animeBar.height() + "px"});
 }
 
-function playerControl($playerDiv, $drawSvg) {
+function playerComponenet($playerDiv, $drawSvg) {
     var progress_start = $drawSvg.rect(PROGRESS_START_WIDTH, PROGRESS_START_HEIGHT).fill('white');
     var progress_circle = $drawSvg.circle(PROGRESS_CIRCLE_RADIUS*2).fill('#e1e1e1');
 
@@ -82,6 +69,7 @@ $(document).ready(function () {
     var $window = $(window),
         $musicCircle = $(".musicCircle").eq(0),
         $musicCirclePlayed = $('#musicCirclePlayed'),
+        $musicCirclePlayed2 = $('#musicCirclePlayed2'),
         $rhythmCircle = $(".rhythmCircle").eq(0),
         $background = $("#bg"),
         $showAlbum = $("#showAlbum"),
@@ -94,12 +82,17 @@ $(document).ready(function () {
     var $drawSvg = SVG('playerControl')
         .size($musicCircle.width() + PROGRESS_CIRCLE_RADIUS * 4, $musicCircle.height() + PROGRESS_START_HEIGHT);
 
+    var player = new Player();
+
     centerMusicCircle($musicCircle);
     centerMusicCircle($musicCirclePlayed);
+    centerMusicCircle($musicCirclePlayed2);
     placeAlbum($musicCircle, $albumCover, $showAlbum);
     centerRhythmCircle($musicCircle);
     animeBar($musicCircle, $animeBar);
-    playerControl($playerDiv, $drawSvg);
+    playerComponenet($playerDiv, $drawSvg);
+
+    player.playedPartMask(0);
 
     var $progressCircle = $('div#playerControl svg circle').eq(0);
 
@@ -110,7 +103,7 @@ $(document).ready(function () {
     $progressCircle.css({'transform-origin': transformData});
     $progressCircle.on('mousedown', function (e) {
         $('body').on('mousemove', function (e) {
-            playerControlRotate($musicCircle, e.pageX, e.pageY, $progressCircle);
+            player.playerControlRotate($musicCircle, e.pageX, e.pageY, $progressCircle);
         });
     });
 
@@ -134,6 +127,7 @@ $(document).ready(function () {
         windowWidth = $window.width();
         centerMusicCircle($musicCircle);
         centerMusicCircle($musicCirclePlayed);
+        centerMusicCircle($musicCirclePlayed2);
         placeAlbum($musicCircle, $albumCover, $showAlbum);
         centerRhythmCircle($musicCircle);
         animeBar($musicCircle, $animeBar);

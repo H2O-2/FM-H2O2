@@ -2,7 +2,8 @@ html, body {
   font-family: "Helvetica Neue", "PingFang SC", "Microsoft YaHei",sans-serif;
   font-weight: 100;
   font-size: 12px;
-  background: #000; }
+  background: #000;
+  height: 0; }
 
 .jumbotron {
   position: fixed;
@@ -52,6 +53,9 @@ div.musicCircle {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-shadow: 0 0 .5rem 0.1rem #e1a8ff, 0 0 .5rem 0.1rem #e1a8ff inset; }
+
+div#musicCircleToPlay {
+  box-shadow: none; }
 
 div.musicCircle div.rhythmCircle {
   position: absolute;
@@ -113,9 +117,6 @@ svg {
 div#playerControl {
   position: relative;
   z-index: 10; }
-
-div#playerControl svg circle {
-  opacity: .8; }
 
 div#playerControl svg circle:hover {
   cursor: pointer; }
