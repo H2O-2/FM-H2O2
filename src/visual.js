@@ -107,16 +107,28 @@ $(document).ready(function () {
         });
     });
 
+    var timer;
+    var albumDisplayed = false;
+
     $showAlbum.hover(function () {
-        $background.delay(300).fadeTo(400, .1, "swing");
-        $albumCover.show().delay(300).fadeTo(300, 1, "swing");
-        $albumName.show().delay(300).fadeTo(400, 1, "swing");
-        $songInfo.delay(300).fadeOut();
+        timer = setTimeout(function () {
+            $background.delay(300).fadeTo(400, .1, "swing");
+            $albumCover.show().delay(300).fadeTo(300, 1, "swing");
+            $albumName.show().delay(300).fadeTo(400, 1, "swing");
+            $songInfo.delay(300).fadeOut();
+            albumDisplayed = true;
+        }, 500);
     }, function () {
-        $background.delay(300).fadeTo(400, .5, "swing");
-        $albumCover.delay(300).fadeTo(300, 0, "swing").hide(0);
-        $albumName.delay(300).fadeTo(400, 0, "swing").hide(0);
-        $songInfo.delay(200).fadeIn();
+        if (albumDisplayed) {
+            $background.delay(300).fadeTo(400, .5, "swing");
+            $albumCover.delay(300).fadeTo(300, 0, "swing").hide(0);
+            $albumName.delay(300).fadeTo(400, 0, "swing").hide(0);
+            $songInfo.delay(200).fadeIn();
+            albumDisplayed = false;
+        } else {
+            clearTimeout(timer);
+        }
+
     });
 
     $albumName.css({top: $rhythmCircle.height() + (windowHeight - $rhythmCircle.height()) / 2,
