@@ -39,7 +39,7 @@ function animeBar($musicCircle, $animeBar) {
     $animeName.css({lineHeight: $animeBar.height() + "px"});
 }
 
-function playerComponenet($playerDiv, $drawSvg) {
+function playerComponent($playerDiv, $drawSvg) {
     var progress_start = $drawSvg.rect(PROGRESS_START_WIDTH, PROGRESS_START_HEIGHT).fill('white');
     var progress_circle = $drawSvg.circle(PROGRESS_CIRCLE_RADIUS*2).fill('#e1e1e1');
 
@@ -82,19 +82,21 @@ $(document).ready(function () {
     var $drawSvg = SVG('playerControl')
         .size($musicCircle.width() + PROGRESS_CIRCLE_RADIUS * 4, $musicCircle.height() + PROGRESS_START_HEIGHT);
 
-    var player = new Player();
-
     centerMusicCircle($musicCircle);
     centerMusicCircle($musicCirclePlayed);
     centerMusicCircle($musicCirclePlayed2);
     placeAlbum($musicCircle, $albumCover, $showAlbum);
     centerRhythmCircle($musicCircle);
     animeBar($musicCircle, $animeBar);
-    playerComponenet($playerDiv, $drawSvg);
-
-    player.playedPartMask(0);
+    playerComponent($playerDiv, $drawSvg);
 
     var $progressCircle = $('div#playerControl svg circle').eq(0);
+
+    var player = new Player($progressCircle);
+
+    player
+
+    player.playedPartMask(0);
 
     var transformData = ($drawSvg.width() / 2 + 1) + 'px' + ' ' + ($drawSvg.height() / 2 + 1) + 'px';
 

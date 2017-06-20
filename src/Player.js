@@ -2,10 +2,14 @@
  * Created by H2O2 on 17/6/17.
  */
 
-function Player() {
+function Player($progressCircle) {
     "use strict";
 
     this.globalHelper = new GlobalHelper();
+    this.prevX = 0;
+    this.prevDegree = 0;
+    this.initX = $progressCircle.offset().left;
+    this.initY = $progressCircle.offset().top;
 
 }
 
@@ -31,12 +35,21 @@ Player.prototype.playerControlRotate = function (refElement, x, y, control) {
 
     var rotateDegree = 90 - (Math.atan2(posnY, posnX) * (180/Math.PI));
 
+    console.log('posns:', this.prevX, posnX);
+
+    if (Math.abs(control.offset().left - this.initX) < 1 && Math.abs(control.offset().top - this.initY) < 1 && rotateDegree < 0) return;
+
+    console.log('control:', control.offset().left, control.offset().top);
+
     if (rotateDegree < 0) rotateDegree = 90 + rotateDegree + 270;
 
-    var rotatePercent = rotateDegree / 360 * 100;
     console.log('rotateDegree', rotateDegree);
 
     control.css({'transform': 'rotate(' + rotateDegree + 'deg)'});
+
+    this.prevX = posnX;
+    this.prevDegree = rotateDegree;
+
     this.playedPartMask(rotateDegree);
     $('body').on('mouseup', function (e) {
         $('body').unbind('mousemove');
