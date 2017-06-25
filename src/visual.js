@@ -23,6 +23,11 @@ function placeAlbum($musicCircle, $albumCover, $showAlbum) {
 
 }
 
+function placeBottomElement($rhythmCircle, $element) {
+    $element.css({top: $rhythmCircle.height() + (windowHeight - $rhythmCircle.height()) / 2,
+        left: windowWidth / 2 - $element.width() / 2});
+}
+
 function centerRhythmCircle($musicCircle) {
     var $rhythmCircle = $("div.musicCircle div.rhythmCircle");
 
@@ -77,6 +82,7 @@ $(document).ready(function () {
         $animeBar = $(".animeBar").eq(0),
         $songInfo = $(".songInfo").eq(0),
         $playerDiv = $("#playerControl"),
+        $functionIcons = $('#functionIcons'),
         $albumName = $("#albumName");
 
     var $drawSvg = SVG('playerControl')
@@ -86,6 +92,8 @@ $(document).ready(function () {
     centerMusicCircle($musicCirclePlayed);
     centerMusicCircle($musicCirclePlayed2);
     placeAlbum($musicCircle, $albumCover, $showAlbum);
+    placeBottomElement($rhythmCircle, $albumName);
+    placeBottomElement($rhythmCircle, $functionIcons);
     centerRhythmCircle($musicCircle);
     animeBar($musicCircle, $animeBar);
     playerComponent($playerDiv, $drawSvg);
@@ -94,14 +102,12 @@ $(document).ready(function () {
 
     var player = new Player($progressCircle);
 
-    player
-
     player.playedPartMask(0);
 
     var transformData = ($drawSvg.width() / 2 + 1) + 'px' + ' ' + ($drawSvg.height() / 2 + 1) + 'px';
 
-    console.log('transformData: ', transformData);
-    console.log($drawSvg.width(), $progressCircle.width());
+    //console.log('transformData: ', transformData);
+    //console.log($drawSvg.width(), $progressCircle.width());
     $progressCircle.css({'transform-origin': transformData});
     $progressCircle.on('mousedown', function (e) {
         $('body').on('mousemove', function (e) {
@@ -115,6 +121,7 @@ $(document).ready(function () {
     $showAlbum.hover(function () {
         timer = setTimeout(function () {
             $background.delay(300).fadeTo(400, .1, "swing");
+            $functionIcons.delay(300).fadeOut(100);
             $albumCover.show().delay(300).fadeTo(300, 1, "swing");
             $albumName.show().delay(300).fadeTo(400, 1, "swing");
             $songInfo.delay(300).fadeOut();
@@ -123,9 +130,10 @@ $(document).ready(function () {
     }, function () {
         if (albumDisplayed) {
             $background.delay(300).fadeTo(400, .5, "swing");
+            $functionIcons.delay(300).fadeIn();
             $albumCover.delay(300).fadeTo(300, 0, "swing").hide(0);
             $albumName.delay(300).fadeTo(400, 0, "swing").hide(0);
-            $songInfo.delay(200).fadeIn();
+            $songInfo.delay(200).fadeIn(100);
             albumDisplayed = false;
         } else {
             clearTimeout(timer);
@@ -133,9 +141,7 @@ $(document).ready(function () {
 
     });
 
-    $albumName.css({top: $rhythmCircle.height() + (windowHeight - $rhythmCircle.height()) / 2,
-        left: windowWidth / 2 - $albumName.width() / 2});
-
+    
     $window.resize(function () {
         windowHeight = $window.height();
         windowWidth = $window.width();
@@ -143,6 +149,8 @@ $(document).ready(function () {
         centerMusicCircle($musicCirclePlayed);
         centerMusicCircle($musicCirclePlayed2);
         placeAlbum($musicCircle, $albumCover, $showAlbum);
+        placeBottomElement($rhythmCircle, $albumName);
+        placeBottomElement($rhythmCircle, $functionIcons);
         centerRhythmCircle($musicCircle);
         animeBar($musicCircle, $animeBar);
 

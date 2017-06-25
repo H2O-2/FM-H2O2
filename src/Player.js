@@ -35,15 +35,17 @@ Player.prototype.playerControlRotate = function (refElement, x, y, control) {
 
     var rotateDegree = 90 - (Math.atan2(posnY, posnX) * (180/Math.PI));
 
-    console.log('posns:', this.prevX, posnX);
+    //console.log('posns:', this.prevX, posnX);
 
-    if (Math.abs(control.offset().left - this.initX) < 1 && Math.abs(control.offset().top - this.initY) < 1 && rotateDegree < 0) return;
+    //console.log(Math.abs(control.offset().left - this.initX), Math.abs(control.offset().top - this.initY) );
+    //console.log('control:', control.offset().left, control.offset().top);
+    //if (Math.abs(control.offset().left - this.initX) < 1 && Math.abs(control.offset().top - this.initY) < 1 && rotateDegree < 0) return;
 
-    console.log('control:', control.offset().left, control.offset().top);
+    //console.log('control:', control.offset().left, control.offset().top);
 
     if (rotateDegree < 0) rotateDegree = 90 + rotateDegree + 270;
 
-    console.log('rotateDegree', rotateDegree);
+    //console.log('rotateDegree', rotateDegree);
 
     control.css({'transform': 'rotate(' + rotateDegree + 'deg)'});
 
