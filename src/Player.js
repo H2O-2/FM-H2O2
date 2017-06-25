@@ -5,20 +5,69 @@
 function Player($progressCircle) {
     "use strict";
 
+    var _curSong = null;
+    var _curVolume = 0.8;
+    var _playerPaused = false;
+
+    this.audio = null;
     this.globalHelper = new GlobalHelper();
     this.prevX = 0;
     this.prevDegree = 0;
     this.initX = $progressCircle.offset().left;
     this.initY = $progressCircle.offset().top;
 
+    this.playerIsPaused = function () {
+        return _playerPaused;
+    };
+    this.setPlayerPaused = function (paused) {
+        _playerPaused = paused;
+    };
+
+    this.setCurSong = function (song) {
+        _curSong = song;
+        this.audio.src = _curSong._songSrc;
+    };
+
+    this.setVolume = function (volume) {
+        if(!volume) volume = _curVolume;
+
+        this.audio.volume = volume;
+    };
+
+    this.volumeUnitUp = function () {
+        if (_curVolume <= 0.9) {
+            _curVolume += 0.1;
+        } else {
+            _curVolume = 1;
+        }
+
+        this.setVolume();
+    };
+
+    this.volumeUnitDown = function () {
+        if (_curVolume >= 0.1) {
+            _curVolume -= 0.1;
+        } else {
+            _curVolume = 0;
+        }
+
+        this.setVolume();
+    };
+
 }
 
+Player.prototype.setAudio = function(audio) {
+    this.audio = audio;
+
+    this.setVolume();
+};
+
 Player.prototype.playSong = function () {
-    //TODO
+    this.audio.play();
 };
 
 Player.prototype.pauseSong = function () {
-    //TODO
+    this.audio.pause(); 
 };
 
 Player.prototype.nextSong = function () {

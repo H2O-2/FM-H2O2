@@ -162,14 +162,92 @@ div#functionIcons {
   position: absolute;
 }
 
-div#functionIcons span {
+div#functionIcons>span {
   color: white;
-  margin-right: 3rem;
+  padding: .5rem 3rem .5rem 0;
   cursor: pointer;
+  -webkit-transition: 0.25s all linear;
+  -moz-transition: 0.25s all linear;
+  -ms-transition: 0.25s all linear;
+  -o-transition: 0.25s all linear;
+  transition: 0.25s all linear;
+}
+
+div#functionIcons span.fa-4x {
+  font-size: 3.5em;
+}
+
+div#functionIcons span:hover {
+  text-shadow: 0 0 2px white;
 }
 
 div#functionIcons span#likeSong {
   color: #ff2222;
-  margin-right: 0;
+  padding-right: 0;
 }
 
+div#functionIcons span#likeSong:hover {
+  text-shadow: 0 0 2px #ff2222;
+}
+
+
+/********Input slider for Volume********/
+
+span#volumeControll {
+  display: inline-block;
+}
+
+span#volumeControll:hover {
+  padding-right: 2rem;
+}
+
+span#volumeControll:hover #volumeSlider{
+  width: 6rem;
+  opacity: 1;
+  margin-left: 1rem;
+}
+
+span#volumeControll span#volumeIcon {
+  display: inline-block;
+}
+
+input#volumeSlider {
+  position: relative;
+  bottom: 12px;
+  display: inline-block;
+  opacity: 0;
+  width: 0;
+  -webkit-transition: 0.25s all linear;
+  -moz-transition: 0.25s all linear;
+  -ms-transition: 0.25s all linear;
+  -o-transition: 0.25s all linear;
+  transition: 0.25s all linear;
+}
+
+input#volumeSlider[type=range]{
+    -webkit-appearance: none;
+}
+
+input#volumeSlider[type=range]::-webkit-slider-runnable-track {
+  height: 5px;
+  background: #fff;
+  border: none;
+  border-radius: 10%;
+}
+
+input#volumeSlider[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  border: none;
+  height: 20px;
+  width: 10px;
+  background: #e595ff;
+  margin-top: -7px;
+}
+
+input#volumeSlider[type=range]:focus {
+  outline: none;
+}
+
+input#volumeSlider[type=range]:focus::-webkit-slider-runnable-track {
+  background: #ccc;
+}

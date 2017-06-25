@@ -83,7 +83,10 @@ $(document).ready(function () {
         $songInfo = $(".songInfo").eq(0),
         $playerDiv = $("#playerControl"),
         $functionIcons = $('#functionIcons'),
-        $albumName = $("#albumName");
+        $albumName = $("#albumName"),
+        $volumeSlider = $('#volumeSlider');
+    
+    var audio = document.getElementById('song');
 
     var $drawSvg = SVG('playerControl')
         .size($musicCircle.width() + PROGRESS_CIRCLE_RADIUS * 4, $musicCircle.height() + PROGRESS_START_HEIGHT);
@@ -101,8 +104,45 @@ $(document).ready(function () {
     var $progressCircle = $('div#playerControl svg circle').eq(0);
 
     var player = new Player($progressCircle);
+    var curSong = new Song('http://fm.h2o2.me/testMusic2.mp3');
 
     player.playedPartMask(0);
+
+    player.setAudio(audio);
+    player.setCurSong(curSong);
+
+    $window.on('keydown', function(e) {
+        switch(e.keyCode) {
+            case 32:
+                if (player.playerIsPaused()) {
+                    player.playSong();
+                    player.setPlayerPaused(false);
+                } else {
+                    player.pauseSong();
+                    player.setPlayerPaused(true);
+                }
+
+                break;
+            case 37:
+                player.prevSong();
+                break;
+            case 39:
+                player.nextSong();
+                break;
+            case 38:
+                player.volumeUnitUp();
+                break;
+            case 40:
+                player.volumeUnitDown();
+                break;
+            default:
+                break;
+        }
+    });
+
+    $volumeSlider.change(function () {
+        player.setVolume(this.value / 100);
+    })
 
     var transformData = ($drawSvg.width() / 2 + 1) + 'px' + ' ' + ($drawSvg.height() / 2 + 1) + 'px';
 
