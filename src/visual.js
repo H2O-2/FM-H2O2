@@ -155,16 +155,7 @@ $(document).ready(function () {
 
     var transformData = ($drawSvg.width() / 2 + 1) + 'px' + ' ' + ($drawSvg.height() / 2 + 1) + 'px';
 
-    //console.log('transformData: ', transformData);
-    //console.log($drawSvg.width(), $progressCircle.width());
-    $progressCircle.css({'transform-origin': transformData});
-    $progressCircle.on('mousedown', function (e) {
-        $('body').on('mousemove', function (e) {
-            player.playerControlRotate($musicCircle, e.pageX, e.pageY, $progressCircle, $('.musicCirclePlayed'));
-        });
-    });
-
-    audio.addEventListener('timeupdate', function () {
+    function timeUpdateActions() {
         var buffered = audio.buffered;
         var duration = audio.duration;
         var curTime = audio.currentTime;
@@ -181,9 +172,19 @@ $(document).ready(function () {
 
             if(buffered.length > 0) player.playerAutoRotate(buffered.end(buffered.length - 1) / audio.duration, $musicCircleBuffered);
         }
+    }
 
+    //console.log('transformData: ', transformData);
+    //console.log($drawSvg.width(), $progressCircle.width());
+    $progressCircle.css({'transform-origin': transformData});
+    $progressCircle.on('mousedown', function (e) {
+        $('body').on('mousemove', function (e) {
+            audio.removeEventListener('timeupdate', timeUpdateActions);
+            player.playerControlRotate($musicCircle, e.pageX, e.pageY, $progressCircle, $('.musicCirclePlayed'), timeUpdateActions);
+        });
+    });
 
-    })
+    audio.addEventListener('timeupdate', timeUpdateActions);
 
     var timer;
     var albumDisplayed = false;

@@ -17,6 +17,7 @@ function Player($progressCircle) {
     this.initX = $progressCircle.offset().left;
     this.initY = $progressCircle.offset().top;
     this.curSongBufferedPercent = 0;
+    this.curTime = 0;
 
     this.playerIsPaused = function () {
         return _playerPaused;
@@ -58,9 +59,10 @@ function Player($progressCircle) {
     this.update = function (time, controller) {
         var playedPercent = time / _curSong._songDuration;
 
+        this.curTime = time;
         controller.css({'transform': 'rotate(' + 360 * playedPercent + 'deg)'});
         this.playerAutoRotate(playedPercent, $('.musicCirclePlayed'));
-        $('#currentTime').text(this.globalHelper.timeStyler(time));
+        this.printTime(time);
     }
 }
 
@@ -89,11 +91,12 @@ Player.prototype.playerAutoRotate = function (percentage, mask) {
     this.playedPartMask(360 * percentage, mask);
 }
 
-Player.prototype.playerControlRotate = function (refElement, x, y, control, mask) {
+Player.prototype.playerControlRotate = function (refElement, x, y, control, mask, timeUpdateActions) {
     var posnX = x - refElement.offset().left - refElement.width() / 2,
         posnY = -(y - refElement.offset().top - refElement.height() / 2);
 
     var rotateDegree = 90 - (Math.atan2(posnY, posnX) * (180/Math.PI));
+    var timeAfterDrag;
 
     //console.log('posns:', this.prevX, posnX);
 
@@ -108,13 +111,15 @@ Player.prototype.playerControlRotate = function (refElement, x, y, control, mask
     //console.log('rotateDegree', rotateDegree);
 
     control.css({'transform': 'rotate(' + rotateDegree + 'deg)'});
-
-    this.prevX = posnX;
-    this.prevDegree = rotateDegree;
+    timeAfterDrag = this.audio.duration * (rotateDegree / 360);
+    this.printTime(timeAfterDrag);
 
     this.playedPartMask(rotateDegree, mask);
+    $this = $(this);
     $('body').on('mouseup', function (e) {
         $('body').unbind('mousemove');
+        $this[0].audio.addEventListener('timeupdate', timeUpdateActions); 
+        $this[0].audio.currentTime = timeAfterDrag;
     });
 };
 
@@ -159,4 +164,8 @@ Player.prototype.playedPartMask = function (rotateDegree, mask) {
         mask.css({'clip-path': mask5 + rawPercentage + '% 0%)'});
     }
 };
+
+Player.prototype.printTime = function(time) {
+    $('#currentTime').text(this.globalHelper.timeStyler(time));
+}
 
