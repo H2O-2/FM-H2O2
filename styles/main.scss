@@ -65,6 +65,12 @@ div.musicCircle {
 
 div#musicCircleToPlay {
   box-shadow: none;
+  border: 2px solid rgba(242, 210, 255, 0.6);;
+}
+
+div#musicCircleBuffered {
+  box-shadow: none;
+  border: 2px solid rgba(219, 133, 255, 0.6); 
 }
 
 div.musicCircle div.rhythmCircle {
@@ -136,10 +142,6 @@ svg {
 div#playerControl {
   position: relative;
   z-index: 10;
-}
-
-div#playerControl svg circle {
-  //opacity: .8;
 }
 
 div#playerControl svg circle:hover {

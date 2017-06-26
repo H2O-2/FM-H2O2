@@ -73,6 +73,7 @@ function playerComponent($playerDiv, $drawSvg) {
 $(document).ready(function () {
     var $window = $(window),
         $musicCircle = $(".musicCircle").eq(0),
+        $musicCircleBuffered = $("#musicCircleBuffered"),
         $musicCirclePlayed = $('#musicCirclePlayed'),
         $musicCirclePlayed2 = $('#musicCirclePlayed2'),
         $rhythmCircle = $(".rhythmCircle").eq(0),
@@ -92,6 +93,7 @@ $(document).ready(function () {
         .size($musicCircle.width() + PROGRESS_CIRCLE_RADIUS * 4, $musicCircle.height() + PROGRESS_START_HEIGHT);
 
     centerMusicCircle($musicCircle);
+    centerMusicCircle($musicCircleBuffered);
     centerMusicCircle($musicCirclePlayed);
     centerMusicCircle($musicCirclePlayed2);
     placeAlbum($musicCircle, $albumCover, $showAlbum);
@@ -106,7 +108,8 @@ $(document).ready(function () {
     var player = new Player($progressCircle);
     var curSong = new Song('http://fm.h2o2.me/testMusic2.mp3');
 
-    player.playedPartMask(0);
+    player.playedPartMask(0, $('.musicCirclePlayed'));
+    player.playedPartMask(0, $musicCircleBuffered);
 
     player.setAudio(audio);
     player.setCurSong(curSong);
@@ -142,6 +145,17 @@ $(document).ready(function () {
 
     $volumeSlider.change(function () {
         player.setVolume(this.value / 100);
+    });
+
+    audio.addEventListener('progress', function () {
+        var buffered = audio.buffered;
+
+        if(buffered.length > 0 && audio.duration) player.playerAutoRotate(buffered.end(buffered.length - 1) / audio.duration, $musicCircleBuffered);
+    });
+    audio.addEventListener('timeupdate', function () {
+        var buffered = audio.buffered;
+
+        if(buffered.length > 0 && audio.duration) player.playerAutoRotate(buffered.end(buffered.length - 1) / audio.duration, $musicCircleBuffered);
     })
 
     var transformData = ($drawSvg.width() / 2 + 1) + 'px' + ' ' + ($drawSvg.height() / 2 + 1) + 'px';
@@ -151,7 +165,7 @@ $(document).ready(function () {
     $progressCircle.css({'transform-origin': transformData});
     $progressCircle.on('mousedown', function (e) {
         $('body').on('mousemove', function (e) {
-            player.playerControlRotate($musicCircle, e.pageX, e.pageY, $progressCircle);
+            player.playerControlRotate($musicCircle, e.pageX, e.pageY, $progressCircle, $('.musicCirclePlayed'));
         });
     });
 
@@ -186,6 +200,7 @@ $(document).ready(function () {
         windowHeight = $window.height();
         windowWidth = $window.width();
         centerMusicCircle($musicCircle);
+        centerMusicCircle($musicCircleBuffered);
         centerMusicCircle($musicCirclePlayed);
         centerMusicCircle($musicCirclePlayed2);
         placeAlbum($musicCircle, $albumCover, $showAlbum);

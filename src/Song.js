@@ -4,7 +4,7 @@
 
 function Song(src) {
     this._songSrc = src;
-    this._songTime = null;
+    this._songDuration = null;
     this._songTitle = null;
     this._songSinger = null;
     this._songalbum = null;

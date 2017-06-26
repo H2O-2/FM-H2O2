@@ -8,6 +8,7 @@ function Player($progressCircle) {
     var _curSong = null;
     var _curVolume = 0.8;
     var _playerPaused = false;
+    var _curSongPlayed = 0;
 
     this.audio = null;
     this.globalHelper = new GlobalHelper();
@@ -15,6 +16,7 @@ function Player($progressCircle) {
     this.prevDegree = 0;
     this.initX = $progressCircle.offset().left;
     this.initY = $progressCircle.offset().top;
+    this.curSongBufferedPercent = 0;
 
     this.playerIsPaused = function () {
         return _playerPaused;
@@ -26,6 +28,7 @@ function Player($progressCircle) {
     this.setCurSong = function (song) {
         _curSong = song;
         this.audio.src = _curSong._songSrc;
+        _curSong._songDuration = this.audio.duration;
     };
 
     this.setVolume = function (volume) {
@@ -78,7 +81,11 @@ Player.prototype.prevSong = function () {
     //TODO
 };
 
-Player.prototype.playerControlRotate = function (refElement, x, y, control) {
+Player.prototype.playerAutoRotate = function (percentage, mask) {
+    this.playedPartMask(360 * percentage, mask);
+}
+
+Player.prototype.playerControlRotate = function (refElement, x, y, control, mask) {
     var posnX = x - refElement.offset().left - refElement.width() / 2,
         posnY = -(y - refElement.offset().top - refElement.height() / 2);
 
@@ -101,7 +108,7 @@ Player.prototype.playerControlRotate = function (refElement, x, y, control) {
     this.prevX = posnX;
     this.prevDegree = rotateDegree;
 
-    this.playedPartMask(rotateDegree);
+    this.playedPartMask(rotateDegree, mask);
     $('body').on('mouseup', function (e) {
         $('body').unbind('mousemove');
     });
@@ -109,12 +116,11 @@ Player.prototype.playerControlRotate = function (refElement, x, y, control) {
 
 
 // Reference: http://www.jianshu.com/p/bc94380c4a22
-Player.prototype.playedPartMask = function (rotateDegree) {
+Player.prototype.playedPartMask = function (rotateDegree, mask) {
 
     var test = Math.tan(Math.PI / 10) / 2 * 100 + 50;
     var rotateDegreeRadian = rotateDegree * Math.PI / 180;
 
-    var mask = $('.musicCirclePlayed');
     var maskingStr = 'polygon(50% 50%,50% 0%,';
     var mask2 = maskingStr + "100% 0%,";
     var mask3 = mask2 + "100% 100%,";
@@ -144,7 +150,7 @@ Player.prototype.playedPartMask = function (rotateDegree) {
     } else if (rotateDegree <= 315) {
         rawPercentage = 100 - (Math.tan(this.globalHelper.degreeToRadian(rotateDegree - 270)) / 2 * 100 + 50);
         mask.css({'clip-path': mask4 + '0% ' + rawPercentage + '%'});
-    } else if (rotateDegree < 360) {
+    } else if (rotateDegree <= 360) {
         rawPercentage = (1 - Math.tan(this.globalHelper.degreeToRadian(45 - (rotateDegree - 315)))) / 2 * 100
         mask.css({'clip-path': mask5 + rawPercentage + '% 0%)'});
     }

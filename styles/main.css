@@ -55,7 +55,12 @@ div.musicCircle {
   box-shadow: 0 0 .5rem 0.1rem #e1a8ff, 0 0 .5rem 0.1rem #e1a8ff inset; }
 
 div#musicCircleToPlay {
-  box-shadow: none; }
+  box-shadow: none;
+  border: 2px solid rgba(242, 210, 255, 0.6); }
+
+div#musicCircleBuffered {
+  box-shadow: none;
+  border: 2px solid rgba(219, 133, 255, 0.6); }
 
 div.musicCircle div.rhythmCircle {
   position: absolute;
