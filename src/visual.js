@@ -104,7 +104,6 @@ $(document).ready(function () {
     playerComponent($playerDiv, $drawSvg);
 
     var $progressCircle = $('div#playerControl svg circle').eq(0);
-
     var player = new Player($progressCircle);
     var curSong = new Song('http://fm.h2o2.me/testMusic2.mp3');
 
@@ -152,11 +151,7 @@ $(document).ready(function () {
 
         if(buffered.length > 0 && audio.duration) player.playerAutoRotate(buffered.end(buffered.length - 1) / audio.duration, $musicCircleBuffered);
     });
-    audio.addEventListener('timeupdate', function () {
-        var buffered = audio.buffered;
-
-        if(buffered.length > 0 && audio.duration) player.playerAutoRotate(buffered.end(buffered.length - 1) / audio.duration, $musicCircleBuffered);
-    })
+    
 
     var transformData = ($drawSvg.width() / 2 + 1) + 'px' + ' ' + ($drawSvg.height() / 2 + 1) + 'px';
 
@@ -168,6 +163,27 @@ $(document).ready(function () {
             player.playerControlRotate($musicCircle, e.pageX, e.pageY, $progressCircle, $('.musicCirclePlayed'));
         });
     });
+
+    audio.addEventListener('timeupdate', function () {
+        var buffered = audio.buffered;
+        var duration = audio.duration;
+        var curTime = audio.currentTime;
+
+        if(duration) {
+            if(!curSong._songDuration) {
+                var globalTemp = new GlobalHelper();
+
+                curSong._songDuration = duration;
+                $('#totalTime').text(globalTemp.timeStyler(duration));
+            }
+
+            player.update(curTime, $progressCircle);
+
+            if(buffered.length > 0) player.playerAutoRotate(buffered.end(buffered.length - 1) / audio.duration, $musicCircleBuffered);
+        }
+
+
+    })
 
     var timer;
     var albumDisplayed = false;

@@ -28,12 +28,10 @@ function Player($progressCircle) {
     this.setCurSong = function (song) {
         _curSong = song;
         this.audio.src = _curSong._songSrc;
-        _curSong._songDuration = this.audio.duration;
     };
 
     this.setVolume = function (volume) {
         if(!volume) volume = _curVolume;
-
         this.audio.volume = volume;
     };
 
@@ -57,11 +55,17 @@ function Player($progressCircle) {
         this.setVolume();
     };
 
+    this.update = function (time, controller) {
+        var playedPercent = time / _curSong._songDuration;
+
+        controller.css({'transform': 'rotate(' + 360 * playedPercent + 'deg)'});
+        this.playerAutoRotate(playedPercent, $('.musicCirclePlayed'));
+        $('#currentTime').text(this.globalHelper.timeStyler(time));
+    }
 }
 
 Player.prototype.setAudio = function(audio) {
     this.audio = audio;
-
     this.setVolume();
 };
 
