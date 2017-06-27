@@ -178,9 +178,11 @@ $(document).ready(function () {
     //console.log($drawSvg.width(), $progressCircle.width());
     $progressCircle.css({'transform-origin': transformData});
     $progressCircle.on('mousedown', function (e) {
+        player.progressCircleDragged = true;
         $('body').on('mousemove', function (e) {
             audio.removeEventListener('timeupdate', timeUpdateActions);
             player.playerControlRotate($musicCircle, e.pageX, e.pageY, $progressCircle, $('.musicCirclePlayed'), timeUpdateActions);
+            // player.progressCircleDragged = false;
         });
     });
 

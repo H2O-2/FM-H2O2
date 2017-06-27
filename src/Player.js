@@ -18,6 +18,7 @@ function Player($progressCircle) {
     this.initY = $progressCircle.offset().top;
     this.curSongBufferedPercent = 0;
     this.curTime = 0;
+    this.progressCircleDragged = false;
 
     this.playerIsPaused = function () {
         return _playerPaused;
@@ -117,6 +118,9 @@ Player.prototype.playerControlRotate = function (refElement, x, y, control, mask
     this.playedPartMask(rotateDegree, mask);
     $this = $(this);
     $('body').on('mouseup', function (e) {
+        if ($(e.target).is('#volumeSlider') || $(e.target).is('#bg') || $(e.target).is('#showAlbum')) return;
+        // if(!$this[0].progressCircleDragged) return;
+        
         $('body').unbind('mousemove');
         $this[0].audio.addEventListener('timeupdate', timeUpdateActions); 
         $this[0].audio.currentTime = timeAfterDrag;
