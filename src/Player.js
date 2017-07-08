@@ -9,6 +9,7 @@ function Player($progressCircle) {
     var _curVolume = 0.8;
     var _playerPaused = false;
     var _curSongPlayed = 0;
+    var $volumeSlider = $('#volumeSlider');
 
     this.audio = null;
     this.globalHelper = new GlobalHelper();
@@ -35,26 +36,23 @@ function Player($progressCircle) {
     this.setVolume = function (volume) {
         if(!volume) volume = _curVolume;
         this.audio.volume = volume;
+        volumeSlider.focus();
     };
 
-    this.volumeUnitUp = function () {
-        if (_curVolume <= 0.9) {
-            _curVolume += 0.1;
-        } else {
-            _curVolume = 1;
-        }
+    this.volumeUnitUp = function (volChange = DEFAULT_VOLUME_CHANGE) {
+        _curVolume += volChange;
 
-        this.setVolume();
+        if (_curVolume > 1) _curVolume = 1;
+
+        volumeSlider.value = _curVolume * 100;
     };
 
-    this.volumeUnitDown = function () {
-        if (_curVolume >= 0.1) {
-            _curVolume -= 0.1;
-        } else {
-            _curVolume = 0;
-        }
+    this.volumeUnitDown = function (volChange = DEFAULT_VOLUME_CHANGE) {
+        _curVolume -= volChange;
 
-        this.setVolume();
+        if (_curVolume < 0) _curVolume = 0;
+
+        volumeSlider.value = _curVolume * 100;
     };
 
     this.update = function (time, controller) {
@@ -118,7 +116,7 @@ Player.prototype.playerControlRotate = function (refElement, x, y, control, mask
     this.playedPartMask(rotateDegree, mask);
     $this = $(this);
     $('body').on('mouseup', function (e) {
-        if ($(e.target).is('#volumeSlider') || $(e.target).is('#bg') || $(e.target).is('#showAlbum')) return;
+        if ($(e.target).is('#volumeControl') || $(e.target).is('#bg') || $(e.target).is('#showAlbum')) return;
         // if(!$this[0].progressCircleDragged) return;
         
         $('body').unbind('mousemove');

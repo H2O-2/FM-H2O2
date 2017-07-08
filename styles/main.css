@@ -44,7 +44,7 @@ div#albumCover div#pause {
   width: 100%;
   height: 100%; }
 
-div.musicCircle {
+.musicCircle {
   position: absolute;
   border: 2px solid rgba(219, 133, 255, 0.6);
   border-radius: 50%;
@@ -62,7 +62,7 @@ div#musicCircleBuffered {
   box-shadow: none;
   border: 2px solid rgba(219, 133, 255, 0.6); }
 
-div.musicCircle div.rhythmCircle {
+#rhythmCircle {
   position: absolute;
   border: 2px solid #db85ff;
   border-radius: 50%;
@@ -162,18 +162,18 @@ div#functionIcons span#likeSong:hover {
   text-shadow: 0 0 2px #ff2222; }
 
 /********Input slider for Volume********/
-span#volumeControll {
+span#volumeControl {
   display: inline-block; }
 
-span#volumeControll:hover {
+span#volumeControl:hover {
   padding-right: 2rem; }
 
-span#volumeControll:hover #volumeSlider {
+span#volumeControl:hover #volumeSlider {
   width: 6rem;
   opacity: 1;
   margin-left: 1rem; }
 
-span#volumeControll span#volumeIcon {
+span#volumeControl span#volumeIcon {
   display: inline-block; }
 
 input#volumeSlider {

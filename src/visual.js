@@ -28,11 +28,11 @@ function placeBottomElement($rhythmCircle, $element) {
         left: windowWidth / 2 - $element.width() / 2});
 }
 
-function centerRhythmCircle($musicCircle) {
-    var $rhythmCircle = $("div.musicCircle div.rhythmCircle");
-
+function centerRhythmCircle($musicCircle, $rhythmCircle) {
     $rhythmCircle.css({top: ($musicCircle.height() - $rhythmCircle.height()) / 2,
         left: ($musicCircle.width() - $rhythmCircle.width()) / 2});
+    // $rhythmCircle.css({top: ($rhythmCircle.height() - $musicCircle.height()) / 2, 
+    //     left: ($rhythmCircle.width() - $musicCircle.width()) / 2});
 }
 
 
@@ -76,7 +76,7 @@ $(document).ready(function () {
         $musicCircleBuffered = $("#musicCircleBuffered"),
         $musicCirclePlayed = $('#musicCirclePlayed'),
         $musicCirclePlayed2 = $('#musicCirclePlayed2'),
-        $rhythmCircle = $(".rhythmCircle").eq(0),
+        $rhythmCircle = $("#rhythmCircle"),
         $background = $("#bg"),
         $showAlbum = $("#showAlbum"),
         $albumCover = $("#albumCover"),
@@ -85,7 +85,9 @@ $(document).ready(function () {
         $playerDiv = $("#playerControl"),
         $functionIcons = $('#functionIcons'),
         $albumName = $("#albumName"),
-        $volumeSlider = $('#volumeSlider');
+        $volumeSlider = $('#volumeSlider'),
+        canvas = document.getElementById('rhythmCircle'),
+        ctx = canvas.getContext('2d');
     
     var audio = document.getElementById('song');
 
@@ -99,7 +101,7 @@ $(document).ready(function () {
     placeAlbum($musicCircle, $albumCover, $showAlbum);
     placeBottomElement($rhythmCircle, $albumName);
     placeBottomElement($rhythmCircle, $functionIcons);
-    centerRhythmCircle($musicCircle);
+    centerRhythmCircle($musicCircle, $rhythmCircle);
     animeBar($musicCircle, $animeBar);
     playerComponent($playerDiv, $drawSvg);
 
@@ -132,10 +134,10 @@ $(document).ready(function () {
                 player.nextSong();
                 break;
             case 38:
-                player.volumeUnitUp();
+                player.volumeUnitUp(e.shiftKey ? SHIFT_VOLUME_CHANGE : DEFAULT_VOLUME_CHANGE);
                 break;
             case 40:
-                player.volumeUnitDown();
+                player.volumeUnitDown(e.shiftKey ? SHIFT_VOLUME_CHANGE : DEFAULT_VOLUME_CHANGE);
                 break;
             default:
                 break;
@@ -225,7 +227,7 @@ $(document).ready(function () {
         placeAlbum($musicCircle, $albumCover, $showAlbum);
         placeBottomElement($rhythmCircle, $albumName);
         placeBottomElement($rhythmCircle, $functionIcons);
-        centerRhythmCircle($musicCircle);
+        centerRhythmCircle($musicCircle, $rhythmCircle);
         animeBar($musicCircle, $animeBar);
 
         $albumName.css({top: $rhythmCircle.height() + (windowHeight - $rhythmCircle.height()) / 2,
