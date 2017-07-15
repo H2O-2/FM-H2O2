@@ -84,6 +84,7 @@ $(document).ready(function () {
         $songInfo = $(".songInfo").eq(0),
         $playerDiv = $("#playerControl"),
         $functionIcons = $('#functionIcons'),
+        $volumeIcon = $('#volumeIcon'),
         $albumName = $("#albumName"),
         $volumeSlider = $('#volumeSlider'),
         canvas = document.getElementById('rhythmCircle'),
@@ -146,6 +147,10 @@ $(document).ready(function () {
 
     $volumeSlider.change(function () {
         player.setVolume(this.value / 100);
+    });
+
+    $volumeIcon.click(function () {
+        player.toggleMute();
     });
 
     audio.addEventListener('progress', function () {

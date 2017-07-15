@@ -7,9 +7,12 @@ function Player($progressCircle) {
 
     var _curSong = null;
     var _curVolume = 0.8;
+    var _volumeBeforeMute = 0.8;
+    var _isMute = false;
     var _playerPaused = false;
     var _curSongPlayed = 0;
     var $volumeSlider = $('#volumeSlider');
+    var $volumeIcon = $('#volumeIcon');
 
     this.audio = null;
     this.globalHelper = new GlobalHelper();
@@ -34,8 +37,13 @@ function Player($progressCircle) {
     };
 
     this.setVolume = function (volume) {
-        if(!volume) volume = _curVolume;
+        if(!volume && volume !== 0) volume = _curVolume;
+
         this.audio.volume = volume;
+        _curVolume = volume;
+        volumeSlider.value = _curVolume * 100;
+        this.toggleVolumeIcon();
+
         volumeSlider.focus();
     };
 
@@ -50,10 +58,29 @@ function Player($progressCircle) {
     this.volumeUnitDown = function (volChange = DEFAULT_VOLUME_CHANGE) {
         _curVolume -= volChange;
 
-        if (_curVolume < 0) _curVolume = 0;
+        if (_curVolume <= 0) {
+            _curVolume = 0;
+            this.toggleVolumeIcon();
+        }
 
         volumeSlider.value = _curVolume * 100;
     };
+
+    this.toggleMute = function() {
+        if (_isMute) {
+            this.setVolume(_volumeBeforeMute);
+            _isMute = false;
+        } else {
+            _volumeBeforeMute = _curVolume;
+            this.setVolume(0);
+            _isMute = true;
+        }
+    }
+
+    this.toggleVolumeIcon = function () {
+        if (_curVolume > 0) $volumeIcon.addClass('fa-volume-up').removeClass('fa-volume-off');
+        else $volumeIcon.removeClass('fa-volume-up').addClass('fa-volume-off');
+    }
 
     this.update = function (time, controller) {
         var playedPercent = time / _curSong._songDuration;
@@ -68,6 +95,7 @@ function Player($progressCircle) {
 Player.prototype.setAudio = function(audio) {
     this.audio = audio;
     this.setVolume();
+    this.toggleVolumeIcon(); // toggle the volume icon back
 };
 
 Player.prototype.playSong = function () {
