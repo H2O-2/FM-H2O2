@@ -31,8 +31,6 @@ function placeBottomElement($rhythmCircle, $element) {
 function centerRhythmCircle($musicCircle, $rhythmCircle) {
     $rhythmCircle.css({top: ($musicCircle.height() - $rhythmCircle.height()) / 2,
         left: ($musicCircle.width() - $rhythmCircle.width()) / 2});
-    // $rhythmCircle.css({top: ($rhythmCircle.height() - $musicCircle.height()) / 2, 
-    //     left: ($rhythmCircle.width() - $musicCircle.width()) / 2});
 }
 
 
@@ -94,6 +92,18 @@ $(document).ready(function () {
 
     var $drawSvg = SVG('playerControl')
         .size($musicCircle.width() + PROGRESS_CIRCLE_RADIUS * 4, $musicCircle.height() + PROGRESS_START_HEIGHT);
+
+    canvas.setAttribute('width', $musicCircle.width() * (9 / 8));
+    canvas.setAttribute('height', $musicCircle.height() * (9 / 8));
+
+    ctx.beginPath();
+    console.log(canvas.width / 2, canvas.height / 2);
+    ctx.arc(canvas.width / 2, canvas.height / 2 , canvas.height / 2 - 3, 0, 2 * Math.PI);
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = '#d78bff';
+    ctx.shadowColor = '#f9b2e2';
+    ctx.shadowBlur = 20;
+    ctx.stroke();
 
     centerMusicCircle($musicCircle);
     centerMusicCircle($musicCircleBuffered);
@@ -181,15 +191,12 @@ $(document).ready(function () {
         }
     }
 
-    //console.log('transformData: ', transformData);
-    //console.log($drawSvg.width(), $progressCircle.width());
     $progressCircle.css({'transform-origin': transformData});
     $progressCircle.on('mousedown', function (e) {
         player.progressCircleDragged = true;
         $('body').on('mousemove', function (e) {
             audio.removeEventListener('timeupdate', timeUpdateActions);
             player.playerControlRotate($musicCircle, e.pageX, e.pageY, $progressCircle, $('.musicCirclePlayed'), timeUpdateActions);
-            // player.progressCircleDragged = false;
         });
     });
 

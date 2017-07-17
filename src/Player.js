@@ -125,17 +125,7 @@ Player.prototype.playerControlRotate = function (refElement, x, y, control, mask
     var rotateDegree = 90 - (Math.atan2(posnY, posnX) * (180/Math.PI));
     var timeAfterDrag;
 
-    //console.log('posns:', this.prevX, posnX);
-
-    //console.log(Math.abs(control.offset().left - this.initX), Math.abs(control.offset().top - this.initY) );
-    //console.log('control:', control.offset().left, control.offset().top);
-    //if (Math.abs(control.offset().left - this.initX) < 1 && Math.abs(control.offset().top - this.initY) < 1 && rotateDegree < 0) return;
-
-    //console.log('control:', control.offset().left, control.offset().top);
-
     if (rotateDegree < 0) rotateDegree = 90 + rotateDegree + 270;
-
-    //console.log('rotateDegree', rotateDegree);
 
     control.css({'transform': 'rotate(' + rotateDegree + 'deg)'});
     timeAfterDrag = this.audio.duration * (rotateDegree / 360);
@@ -145,7 +135,6 @@ Player.prototype.playerControlRotate = function (refElement, x, y, control, mask
     $this = $(this);
     $('body').on('mouseup', function (e) {
         if ($(e.target).is('#volumeControl') || $(e.target).is('#bg') || $(e.target).is('#showAlbum')) return;
-        // if(!$this[0].progressCircleDragged) return;
         
         $('body').unbind('mousemove');
         $this[0].audio.addEventListener('timeupdate', timeUpdateActions); 
