@@ -87,7 +87,7 @@ $(document).ready(function () {
         $volumeSlider = $('#volumeSlider'),
         canvas = document.getElementById('rhythmCircle'),
         ctx = canvas.getContext('2d');
-    
+
     var audio = document.getElementById('song');
 
     var $drawSvg = SVG('playerControl')
@@ -168,7 +168,7 @@ $(document).ready(function () {
 
         if(buffered.length > 0 && audio.duration) player.playerAutoRotate(buffered.end(buffered.length - 1) / audio.duration, $musicCircleBuffered);
     });
-    
+
 
     var transformData = ($drawSvg.width() / 2 + 1) + 'px' + ' ' + ($drawSvg.height() / 2 + 1) + 'px';
 
@@ -228,7 +228,7 @@ $(document).ready(function () {
 
     });
 
-    
+
     $window.resize(function () {
         windowHeight = $window.height();
         windowWidth = $window.width();

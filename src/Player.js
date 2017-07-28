@@ -103,7 +103,7 @@ Player.prototype.playSong = function () {
 };
 
 Player.prototype.pauseSong = function () {
-    this.audio.pause(); 
+    this.audio.pause();
 };
 
 Player.prototype.nextSong = function () {
@@ -135,9 +135,9 @@ Player.prototype.playerControlRotate = function (refElement, x, y, control, mask
     $this = $(this);
     $('body').on('mouseup', function (e) {
         if ($(e.target).is('#volumeControl') || $(e.target).is('#bg') || $(e.target).is('#showAlbum')) return;
-        
+
         $('body').unbind('mousemove');
-        $this[0].audio.addEventListener('timeupdate', timeUpdateActions); 
+        $this[0].audio.addEventListener('timeupdate', timeUpdateActions);
         $this[0].audio.currentTime = timeAfterDrag;
     });
 };
