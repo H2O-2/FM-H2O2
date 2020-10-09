@@ -4,19 +4,32 @@
   "description": "FM@H2O2",
   "main": "index.js",
   "dependencies": {
-    "bootstrap": "^3.3.7",
+    "bootstrap": "^3.4.1",
     "font-awesome": "^4.7.0",
-    "jquery": "^3.2.1",
+    "jquery": "^3.5.1",
     "normalize": "^0.3.1",
     "normalize.css": "^7.0.0",
     "svg.filter.js": "^2.0.2",
-    "svg.js": "^2.6.2"
+    "svg.js": "^2.7.1",
+    "webpack": "^4.44.2"
   },
   "devDependencies": {
-    "webpack": "^2.6.1"
+    "@babel/cli": "^7.11.6",
+    "@babel/core": "^7.11.6",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/preset-env": "^7.11.5",
+    "@babel/preset-typescript": "^7.10.4",
+    "@types/jquery": "^3.5.1",
+    "babel-loader": "^8.1.0",
+    "typescript": "^4.0.3",
+    "webpack-cli": "^3.3.12"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "type-check": "tsc --noEmit",
+    "type-check:watch": "npm run type-check -- --watch",
+    "build": "npm run build:types && npm run bundle",
+    "build:types": "tsc --emitDeclarationOnly",
+    "bundle": "webpack"
   },
   "repository": {
     "type": "git",
