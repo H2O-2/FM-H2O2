@@ -4,6 +4,8 @@
   "description": "FM@H2O2",
   "main": "index.js",
   "dependencies": {
+    "@svgdotjs/svg.filter.js": "^3.0.7",
+    "@svgdotjs/svg.js": "^3.0.16",
     "bootstrap": "^3.4.1",
     "font-awesome": "^4.7.0",
     "jquery": "^3.5.1",

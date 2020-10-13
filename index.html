@@ -14,7 +14,7 @@
     <script src="dist/app.bundle.js"></script>
 </head>
 <body>
-    <audio id="song" autoplay="autoplay"></audio>
+    <audio id="song"></audio>
     <div class="jumbotron" id="bg"></div>
     <div id="showAlbum"></div>
     <div id="albumCover">
@@ -23,8 +23,8 @@
     <div class="musicCircle" id="musicCircleToPlay">
         <div id="playerControl"></div>
         <canvas id="rhythmCircle"></canvas>
-        <div class="animeBar songInfo">
-            <p class="songTimer"><span id="currentTime">--:--</span> / <span id="totalTime">--:--</span></p>
+        <div class="animeBar songInfo" id="playerBar">
+            <p class="songTimer" id="playerTimer"><span id="currentTime">--:--</span> / <span id="totalTime">--:--</span></p>
         </div>
         <div id="songTitle" class="songInfo"><p>NO, Thank You!</p></div>
         <div id="singer" class="songInfo">&ndash; 放課後ティータイム</div>
