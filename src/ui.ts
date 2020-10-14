@@ -38,6 +38,46 @@ class MusicCircle {
         });
     }
 
+    /*
+    * The `clip-path` used here would cut off part of the `box-shadow`
+    * used to represent the progress bar. Some possible work-arounds:
+    * 1. Use `filter: drop-shadow` instead of `box-shadow`
+    * 2. Bring border and `box-shadow` into the div element to prevent
+    *    clipping
+    */
+    updateProgress(progress: number) : void {
+        // Filter input
+        progress = Math.min(Math.max(progress, 0), 100)
+
+        const maskingStr: string = "polygon(50% 50%,50% 0%,";
+        const mask2: string = maskingStr + "100% 0%,";
+        const mask3: string = mask2 + "100% 100%,";
+        const mask4: string = mask3 + "0% 100%,";
+        const mask5: string = mask4 + "0% 0%,";
+
+        if (progress <= 12.5) {
+            this.raw.css({
+                "clip-path": maskingStr + (50 + progress * 4).toString() + "% 0%"
+            });
+        } else if (progress <= 37.5) {
+            this.raw.css({
+                "clip-path": mask2 + "100% " + (progress * 4 - 50).toString() + "%"
+            });
+        } else if (progress <= 62.5) {
+            this.raw.css({
+                "clip-path": mask3 + (progress * 4 - 150).toString() + "% 100%"
+            });
+        } else if (progress <= 87.5) {
+            this.raw.css({
+                "clip-path": mask4 + "0% " + (progress * 4 - 250).toString() + "%"
+            });
+        } else {
+            this.raw.css({
+                "clip-path": mask5 + (progress * 4 - 350).toString() + "% 0%"
+            });
+        }
+    }
+
     getWidth() : number {
         return this.width;
     }
@@ -53,7 +93,6 @@ class RythmCircle extends MusicCircle {
     }
 
     center(musicCircleWidth: number, musicCircleHeight: number) : void {
-        console.log("TEST:", musicCircleWidth, this.width, musicCircleHeight, this.height);
         this.raw.css({
             top: (musicCircleHeight - this.height) / 2,
             left: (musicCircleWidth - this.width) / 2
@@ -100,6 +139,7 @@ export default class UI {
     private static rhythmCircle: RythmCircle;
 
     private static svg: Svg;
+    private static progressController: JQuery<HTMLElement>;
 
     private static windowWidth: number;
     private static windowHeight: number;
@@ -152,6 +192,12 @@ export default class UI {
         this.rhythmCircle.placeElementAtBottom(this.functionIcons, this.windowWidth, this.windowHeight);
         this.placePlayerBar();
         this.initPlayerComponent();
+
+        // Initialize progress circle
+        [this.musicCircleBuffered, this.musicCirclePlayed, this.musicCirclePlayed2]
+            .forEach((circle: MusicCircle) => circle.updateProgress(0));
+
+        this.progressController = $("progressCircle").eq(0);
     }
 
     static updateWindowSize() : void {
@@ -204,6 +250,7 @@ export default class UI {
     static initPlayerComponent() {
         let progress_start: Rect = this.svg.rect(PROGRESS_START_WIDTH, PROGRESS_START_HEIGHT).fill('white');
         let progress_circle: Circle = this.svg.circle(PROGRESS_CIRCLE_RADIUS*2).fill('#e1e1e1');
+        progress_circle.addClass("progressCircle");
 
         let startRecPosnX: number = this.svg.width() / 2 - PROGRESS_START_WIDTH / 2;
         let progressCirclePosnX: number = this.svg.width() / 2;
@@ -229,4 +276,5 @@ export default class UI {
         $progressFilter[0].setAttribute("x", "-40%");
         $progressFilter[0].setAttribute("y", "-40%");
     }
+
 }
