@@ -1,6 +1,7 @@
 import Song from './song'
 
 const DEFAULT_VOL: number = 0.8;
+const UNIT_VOL: number = 0.01;
 const AUTO_PLAY: boolean = true;
 
 export default class Player {
@@ -51,10 +52,34 @@ export default class Player {
         }
     }
 
-    toggleMute() : void {
+    volumeUnitUp() : number {
+        if (this.audio.volume >= 1)
+            return 100
+
+        this.audio.volume = parseFloat((this.audio.volume + UNIT_VOL).toFixed(2));
+        return this.audio.volume * 100;
+    }
+
+    volumeUnitDown() : number {
+        if (this.audio.volume <= 0)
+            return 0
+
+        this.audio.volume = parseFloat((this.audio.volume - UNIT_VOL).toFixed(2));
+        return this.audio.volume * 100;
+    }
+
+    setVolume(volume: number) {
+        this.audio.volume = volume;
+        this.prevVolume = 0;
+    };
+
+    toggleMute() : number {
+        // Swap the value of this.preVolume with the current volume
         const tmp: number = this.prevVolume;
         this.prevVolume = this.audio.volume;
         this.audio.volume = tmp;
+
+        return this.audio.volume * 100;
     }
 }
 

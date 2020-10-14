@@ -7,6 +7,8 @@ const PROGRESS_CIRCLE_RADIUS = 8;
 const PROGRESS_START_HEIGHT = 24;
 const PROGRESS_START_WIDTH = 6;
 const DRAG_CONTROL_OFFSET = 6;
+const VOL_ON_ICON = "fa-volume-up";
+const VOL_OFF_ICON = "fa-volume-off";
 
 // Return the output of `sizeFn` if it's valid or throw an Error
 function elementSize(sizeFn: () => number | undefined, id : string) : number {
@@ -126,9 +128,9 @@ export default class UI {
     private static playerBar: JQuery<HTMLElement>;
     private static playerTimer: JQuery<HTMLElement>;
     private static playerDiv: JQuery<HTMLElement>;
-    private static functionIcons: JQuery<HTMLElement>;
+    private static functionIcons: JQuery<HTMLSpanElement>;
     private static volumeIcon: JQuery<HTMLElement>;
-    private static volumeSlider: JQuery<HTMLElement>;
+    private static volumeSlider: JQuery<HTMLInputElement>;
     private static canvas: HTMLCanvasElement;
     private static canvasCtx: CanvasRenderingContext2D;
 
@@ -277,4 +279,13 @@ export default class UI {
         $progressFilter[0].setAttribute("y", "-40%");
     }
 
+    static updateVolumeUI(volume: number) {
+        if (volume === 0 && this.volumeIcon.hasClass(VOL_ON_ICON)) {
+            this.volumeIcon.removeClass(VOL_ON_ICON).addClass(VOL_OFF_ICON);
+        } else if (volume > 0 && this.volumeIcon.hasClass(VOL_OFF_ICON)) {
+            this.volumeIcon.removeClass(VOL_OFF_ICON).addClass(VOL_ON_ICON);
+        }
+
+        this.volumeSlider.val(volume.toString());
+    }
 }
