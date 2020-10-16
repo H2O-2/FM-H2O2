@@ -3,8 +3,8 @@ import Player from './player'
 import jQuery from 'jquery'
 import UI from './ui';
 
-// const DEFAULT_SONG_SRC: string = "https://fm.h2o2.me/testMusic2.mp3"
-const DEFAULT_SONG_SRC: string = "http://localhost:8080/testMusic2.mp3";
+const DEFAULT_SONG_SRC: string = "https://fm.h2o2.me/testMusic2.mp3"
+// const DEFAULT_SONG_SRC: string = "http://localhost:8080/testMusic2.mp3";
 
 jQuery(() => {
     const $window:JQuery<Window> = $(window);
@@ -13,8 +13,16 @@ jQuery(() => {
 
     UI.init($window);
 
-    let player: Player = new Player();
-    player.setSong(new Song(DEFAULT_SONG_SRC));
+    let audio: HTMLAudioElement = document.getElementById('song') as HTMLAudioElement;
+    let player: Player = new Player(audio);
+    let song: Song = new Song(DEFAULT_SONG_SRC, UI.updateSongInfo);
+
+    // Set current playing song and update song duration
+    player.setSong(song);
+    audio.onloadedmetadata = () => {
+        song.setDuration(audio.duration);
+        UI.updateSongDuration(song);
+    }
 
     /*
      * Keyboard controls:

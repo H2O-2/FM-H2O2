@@ -1,6 +1,7 @@
 /// <reference path="../node_modules/@svgdotjs/svg.filter.js/svg.filter.js.d.ts"/>
 import { Svg, SVG, Rect, Circle, Filter, GaussianBlurEffect} from "@svgdotjs/svg.js";
 import "@svgdotjs/svg.filter.js";
+import Song from "./song";
 
 const PROGRESS_CIRCLE_BORDER = 2;
 const PROGRESS_CIRCLE_RADIUS = 8;
@@ -16,6 +17,16 @@ function elementSize(sizeFn: () => number | undefined, id : string) : number {
     if (!n) throw Error(`Cannot get value of ${id}`);
 
     return n;
+}
+
+// convert time in seconds to form of mm:ss, return a string
+function timeStyler (time: number) {
+
+    function styler(time: number) {
+        return time < 10 ? '0' + time : time;
+    }
+
+    return styler(Math.floor(time / 60)) + ':' + styler(Math.round(time % 60));
 }
 
 class MusicCircle {
@@ -122,9 +133,12 @@ class RythmCircle extends MusicCircle {
 export default class UI {
     private static window: JQuery<Window>;
     private static background: JQuery<HTMLElement>;
+    private static title: JQuery<HTMLElement>;
+    private static artist: JQuery<HTMLInputElement>;
     private static showAlbum: JQuery<HTMLElement>;
     private static albumCover: JQuery<HTMLElement>;
     private static albumName: JQuery<HTMLElement>;
+    private static totalTime: JQuery<HTMLElement>;
     private static playerBar: JQuery<HTMLElement>;
     private static playerTimer: JQuery<HTMLElement>;
     private static playerDiv: JQuery<HTMLElement>;
@@ -150,9 +164,12 @@ export default class UI {
     static init(window: JQuery<Window>): void {
         this.window = window;
         this.background = $("#bg");
+        this.title = $("#songTitle");
+        this.artist = $("#artist");
         this.showAlbum = $("#showAlbum");
         this.albumCover = $("#albumCover");
         this.albumName = $("#albumName");
+        this.totalTime = $("#totalTime")
         this.playerBar = $("#playerBar");
         this.playerTimer = $("#playerTimer");
         this.playerDiv = $("#playerControl");
@@ -271,12 +288,23 @@ export default class UI {
             add.blend(add.$source, blur, "normal");
         });
 
-        var $progressFilter = $("div.musicCircle div#playerControl").find("filter:first-child");
+        let $progressFilter = $("div.musicCircle div#playerControl").find("filter:first-child");
 
         $progressFilter[0].setAttribute("width", "200%");
         $progressFilter[0].setAttribute("height", "200%");
         $progressFilter[0].setAttribute("x", "-40%");
         $progressFilter[0].setAttribute("y", "-40%");
+    }
+
+    static updateSongInfo(song: Song) {
+        UI.title.text(song.getTitle());
+        UI.artist.text(song.getArtist());
+
+        // TODO: Album info
+    }
+
+    static updateSongDuration(song: Song) {
+        this.totalTime.text(timeStyler(song.getDuration()));
     }
 
     static updateVolumeUI(volume: number) {

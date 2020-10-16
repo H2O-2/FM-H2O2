@@ -13,8 +13,8 @@ export default class Player {
     private paused: boolean = !AUTO_PLAY;
     private prevVolume: number = 0;
 
-    constructor() {
-        this.audio = document.getElementById('song') as HTMLAudioElement;
+    constructor(audio: HTMLAudioElement) {
+        this.audio = audio;
         this.volumeIcon = $('#volumeIcon');
         this.volumeSlider = $('#volumeSlider');
         if (!this.audio || !this.volumeIcon || !this.volumeSlider) {
@@ -41,7 +41,7 @@ export default class Player {
 
     setSong(song: Song): void {
         this.curSong = song;
-        this.audio.src = this.curSong.songSrc;
+        this.audio.src = this.curSong.getSrc();
     }
 
     updateSongStatus() : void {
