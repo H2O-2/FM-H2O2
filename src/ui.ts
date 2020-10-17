@@ -7,7 +7,6 @@ const PROGRESS_CIRCLE_BORDER = 2;
 const PROGRESS_CIRCLE_RADIUS = 8;
 const PROGRESS_START_HEIGHT = 24;
 const PROGRESS_START_WIDTH = 6;
-const DRAG_CONTROL_OFFSET = 6;
 const VOL_ON_ICON = "fa-volume-up";
 const VOL_OFF_ICON = "fa-volume-off";
 
@@ -26,7 +25,7 @@ function timeStyler (time: number) {
         return time < 10 ? '0' + time : time;
     }
 
-    return styler(Math.floor(time / 60)) + ':' + styler(Math.round(time % 60));
+    return styler(Math.floor(time / 60)) + ':' + styler(Math.floor(time % 60));
 }
 
 class MusicCircle {
@@ -61,6 +60,7 @@ class MusicCircle {
     updateProgress(progress: number) : void {
         // Filter input
         progress = Math.min(Math.max(progress, 0), 100)
+        const rotateDegree = 360 * progress / 100;
 
         const maskingStr: string = "polygon(50% 50%,50% 0%,";
         const mask2: string = maskingStr + "100% 0%,";
@@ -68,35 +68,78 @@ class MusicCircle {
         const mask4: string = mask3 + "0% 100%,";
         const mask5: string = mask4 + "0% 0%,";
 
-        if (progress <= 12.5) {
-            this.raw.css({
-                "clip-path": maskingStr + (50 + progress * 4).toString() + "% 0%"
-            });
-        } else if (progress <= 37.5) {
-            this.raw.css({
-                "clip-path": mask2 + "100% " + (progress * 4 - 50).toString() + "%"
-            });
-        } else if (progress <= 62.5) {
-            this.raw.css({
-                "clip-path": mask3 + (progress * 4 - 150).toString() + "% 100%"
-            });
-        } else if (progress <= 87.5) {
-            this.raw.css({
-                "clip-path": mask4 + "0% " + (progress * 4 - 250).toString() + "%"
-            });
-        } else {
-            this.raw.css({
-                "clip-path": mask5 + (progress * 4 - 350).toString() + "% 0%"
-            });
+        let rawPercentage;
+
+        function degreeToRadian(degree: number): number {
+            return degree * Math.PI / 180;
         }
+
+        if (rotateDegree <= 45) {
+            rawPercentage = Math.tan(degreeToRadian(rotateDegree)) / 2 * 100 + 50;
+            this.raw.css({'clip-path': maskingStr + rawPercentage + '% 0%)'});
+        } else if (rotateDegree <= 90) {
+            rawPercentage = (1 - Math.tan(degreeToRadian(90 - rotateDegree))) / 2 * 100;
+            this.raw.css({'clip-path': mask2 + '100%' + rawPercentage + '%'});
+        } else if (rotateDegree <= 135) {
+            rawPercentage = Math.tan(degreeToRadian(rotateDegree - 90)) / 2 * 100 + 50;
+            this.raw.css({'clip-path': mask2 + '100%' + rawPercentage + '%'});
+        } else if (rotateDegree <= 180) {
+            rawPercentage = 100 - (1 - Math.tan(degreeToRadian(45 - (rotateDegree - 135)))) / 2 * 100;
+            this.raw.css({'clip-path': mask3 + rawPercentage + '% 100%'});
+        } else if (rotateDegree <= 225) {
+            rawPercentage = 100 - (Math.tan(degreeToRadian(rotateDegree - 180)) / 2 * 100 + 50);
+            this.raw.css({'clip-path': mask3 + rawPercentage + '% 100%'});
+        } else if (rotateDegree <= 270) {
+            rawPercentage = 100 - (1 - Math.tan(degreeToRadian(45 - (rotateDegree - 225)))) / 2 * 100;
+            this.raw.css({'clip-path': mask4 + '0% ' + rawPercentage + '%'});
+        } else if (rotateDegree <= 315) {
+            rawPercentage = 100 - (Math.tan(degreeToRadian(rotateDegree - 270)) / 2 * 100 + 50);
+            this.raw.css({'clip-path': mask4 + '0% ' + rawPercentage + '%'});
+        } else if (rotateDegree <= 360) {
+            rawPercentage = (1 - Math.tan(degreeToRadian(45 - (rotateDegree - 315)))) / 2 * 100
+            this.raw.css({'clip-path': mask5 + rawPercentage + '% 0%)'});
+        }
+
+        /*
+        * Apparently this will make the masking go around the
+        * circle in an uneven speed.
+        */
+        // if (progress <= 12.5) {
+        //     this.raw.css({
+        //         "clip-path": maskingStr + (50 + progress * 4).toString() + "% 0%"
+        //     });
+        // } else if (progress <= 37.5) {
+        //     this.raw.css({
+        //         "clip-path": mask2 + "100% " + (progress * 4 - 50).toString() + "%"
+        //     });
+        // } else if (progress <= 62.5) {
+        //     this.raw.css({
+        //         "clip-path": mask3 + (progress * 4 - 150).toString() + "% 100%"
+        //     });
+        // } else if (progress <= 87.5) {
+        //     this.raw.css({
+        //         "clip-path": mask4 + "0% " + (progress * 4 - 250).toString() + "%"
+        //     });
+        // } else {
+        //     this.raw.css({
+        //         "clip-path": mask5 + (progress * 4 - 350).toString() + "% 0%"
+        //     });
+        // }
     }
 
-    getWidth() : number {
+    getWidth(): number {
         return this.width;
     }
 
-    getHeight() : number {
+    getHeight(): number {
         return this.height;
+    }
+
+    getOffset(): JQuery.Coordinates {
+        const offset: JQuery.Coordinates | undefined = this.raw.offset();
+        if (!offset) throw Error("Cannot get music circle offset");
+
+        return offset;
     }
 }
 
@@ -138,6 +181,7 @@ export default class UI {
     private static showAlbum: JQuery<HTMLElement>;
     private static albumCover: JQuery<HTMLElement>;
     private static albumName: JQuery<HTMLElement>;
+    private static currentTime: JQuery<HTMLElement>;
     private static totalTime: JQuery<HTMLElement>;
     private static playerBar: JQuery<HTMLElement>;
     private static playerTimer: JQuery<HTMLElement>;
@@ -155,7 +199,6 @@ export default class UI {
     private static rhythmCircle: RythmCircle;
 
     private static svg: Svg;
-    private static progressController: JQuery<HTMLElement>;
 
     private static windowWidth: number;
     private static windowHeight: number;
@@ -169,6 +212,7 @@ export default class UI {
         this.showAlbum = $("#showAlbum");
         this.albumCover = $("#albumCover");
         this.albumName = $("#albumName");
+        this.currentTime = $("#currentTime")
         this.totalTime = $("#totalTime")
         this.playerBar = $("#playerBar");
         this.playerTimer = $("#playerTimer");
@@ -216,7 +260,10 @@ export default class UI {
         [this.musicCircleBuffered, this.musicCirclePlayed, this.musicCirclePlayed2]
             .forEach((circle: MusicCircle) => circle.updateProgress(0));
 
-        this.progressController = $("progressCircle").eq(0);
+        // Since the music circle does not resize (for now), transform-origin of progress circle can stay constant
+        $(".progressCircle").eq(0).css({
+            'transform-origin': (this.svg.width() / 2 + 1) + "px" + ' ' + (this.svg.height() / 2 + 1) + "px"
+        });
     }
 
     static updateWindowSize() : void {
@@ -232,6 +279,15 @@ export default class UI {
             })
 
         this.rhythmCircle.center(this.musicCircle.getWidth(), this.musicCircle.getHeight());
+    }
+
+    static updatePlayProgress(progress: number): void {
+        this.musicCirclePlayed.updateProgress(progress);
+        this.musicCirclePlayed2.updateProgress(progress);
+    }
+
+    static updateBufferProgress(progress: number): void {
+        this.musicCircleBuffered.updateProgress(progress);
     }
 
     static placeAlbum() : void {
@@ -315,5 +371,32 @@ export default class UI {
         }
 
         this.volumeSlider.val(volume.toString());
+    }
+
+    static timeUpdate(currentTimeSec: number, playedPercent: number, progressController: JQuery<HTMLElement>) {
+        progressController.css({
+            transform: 'rotate(' + 360 * playedPercent + 'deg)'
+        });
+        UI.updatePlayProgress(playedPercent * 100);
+        this.currentTime.text(timeStyler(currentTimeSec));
+    }
+
+    static dragProgressController(x: number, y: number, duration: number, progressController: JQuery<HTMLElement>): number {
+        const posnX = x - this.musicCircle.getOffset().left - this.musicCircle.getWidth() / 2,
+              posnY = -(y - this.musicCircle.getOffset().top - this.musicCircle.getHeight() / 2);
+
+        let rotateDegree = 90 - (Math.atan2(posnY, posnX) * (180/Math.PI));
+        let timeAfterDrag;
+
+        // Progress circle wrap around
+        if (rotateDegree < 0) rotateDegree = 90 + rotateDegree + 270;
+
+        // Update UI to reflect progress after dragging
+        progressController.css({'transform': 'rotate(' + rotateDegree + 'deg)'});
+        timeAfterDrag = duration * (rotateDegree / 360);
+        this.currentTime.text(timeStyler(timeAfterDrag));
+        this.updatePlayProgress(rotateDegree / 360 * 100);
+
+        return timeAfterDrag;
     }
 }

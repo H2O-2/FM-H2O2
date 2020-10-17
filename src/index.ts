@@ -13,6 +13,8 @@ jQuery(() => {
 
     UI.init($window);
 
+    const progressController = $(".progressCircle").eq(0);
+
     let audio: HTMLAudioElement = document.getElementById('song') as HTMLAudioElement;
     let player: Player = new Player(audio);
     let song: Song = new Song(DEFAULT_SONG_SRC, UI.updateSongInfo);
@@ -78,4 +80,36 @@ jQuery(() => {
     volumeIcon.on("click", () => {
         UI.updateVolumeUI(player.toggleMute());
     })
+
+    // Register audio buffering handler
+    audio.addEventListener("progress", () => {
+        const buffered: TimeRanges = audio.buffered;
+
+        if (buffered.length > 0 && audio.duration)
+            UI.updateBufferProgress((buffered.end(buffered.length - 1) / audio.duration) * 100);
+    });
+
+    // Register time update handler (player controller & current time update)
+    let timeUpdateHandler = () =>
+        UI.timeUpdate(audio.currentTime, audio.currentTime / song.getDuration(), progressController);
+    audio.addEventListener('timeupdate', timeUpdateHandler);
+
+    // Register player controller drag
+    let timeAfterDrag = 0;
+    progressController.on('mousedown', () => {
+        // Dragging event
+        $("body").on('mousemove', (e: JQuery.MouseMoveEvent) => {
+            audio.removeEventListener('timeupdate', timeUpdateHandler);
+            timeAfterDrag = UI.dragProgressController(e.pageX, e.pageY, song.getDuration(), progressController);
+        });
+
+        // Finish dragging
+        $("body").on('mouseup', (e: JQuery.MouseUpEvent) => {
+            if ($(e.target).is('#volumeControl') || $(e.target).is('#bg') || $(e.target).is('#showAlbum')) return;
+
+            $('body').off("mousemove");
+            audio.addEventListener('timeupdate', timeUpdateHandler);
+            audio.currentTime = timeAfterDrag;
+        });
+    });
 })
