@@ -32,7 +32,7 @@ export default class Player {
     setPlayerPaused(paused: boolean) : void {
         this.paused = paused;
         this.updateSongStatus();
-    };
+    }
 
     togglePlayerPaused() : void {
         this.paused = !this.paused;
@@ -68,10 +68,10 @@ export default class Player {
         return this.audio.volume * 100;
     }
 
-    setVolume(volume: number) {
+    setVolume(volume: number): void {
         this.audio.volume = volume;
         this.prevVolume = 0;
-    };
+    }
 
     toggleMute() : number {
         // Swap the value of this.preVolume with the current volume

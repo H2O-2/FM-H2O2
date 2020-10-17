@@ -1,4 +1,3 @@
-/// <reference path="../node_modules/@svgdotjs/svg.filter.js/svg.filter.js.d.ts"/>
 import { Svg, SVG, Rect, Circle, Filter, GaussianBlurEffect} from "@svgdotjs/svg.js";
 import "@svgdotjs/svg.filter.js";
 import Song from "./song";
@@ -11,7 +10,7 @@ const VOL_ON_ICON = "fa-volume-up";
 const VOL_OFF_ICON = "fa-volume-off";
 
 // Return the output of `sizeFn` if it's valid or throw an Error
-function elementSize(sizeFn: () => number | undefined, id : string) : number {
+function elementSize(sizeFn: () => number | undefined, id : string): number {
     const n: number | undefined = sizeFn();
     if (!n) throw Error(`Cannot get value of ${id}`);
 
@@ -19,7 +18,7 @@ function elementSize(sizeFn: () => number | undefined, id : string) : number {
 }
 
 // convert time in seconds to form of mm:ss, return a string
-function timeStyler (time: number) {
+function timeStyler (time: number): string {
 
     function styler(time: number) {
         return time < 10 ? '0' + time : time;
@@ -57,7 +56,7 @@ class MusicCircle {
     * 2. Bring border and `box-shadow` into the div element to prevent
     *    clipping
     */
-    updateProgress(progress: number) : void {
+    updateProgress(progress: number): void {
         // Filter input
         progress = Math.min(Math.max(progress, 0), 100)
         const rotateDegree = 360 * progress / 100;
@@ -148,20 +147,20 @@ class RythmCircle extends MusicCircle {
         super(id);
     }
 
-    center(musicCircleWidth: number, musicCircleHeight: number) : void {
+    center(musicCircleWidth: number, musicCircleHeight: number): void {
         this.raw.css({
             top: (musicCircleHeight - this.height) / 2,
             left: (musicCircleWidth - this.width) / 2
         });
     }
 
-    placeElementAtBottom(element: JQuery<HTMLElement>, windowWidth: number, windowHeight: number) : void {
+    placeElementAtBottom(element: JQuery<HTMLElement>, windowWidth: number, windowHeight: number): void {
         element.css({
             top: this.height + (windowHeight - this.height) / 2,
             left: windowWidth / 2 - elementSize(() : number | undefined => element.width(), "RythmCircle Bottom Element") / 2});
     }
 
-    draw(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) : void {
+    draw(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D): void {
         ctx.beginPath();
         console.log(canvas.width / 2, canvas.height / 2);
         ctx.arc(canvas.width / 2, canvas.height / 2 , canvas.height / 2 - 3, 0, 2 * Math.PI);
@@ -266,13 +265,13 @@ export default class UI {
         });
     }
 
-    static updateWindowSize() : void {
+    static updateWindowSize(): void {
         this.windowWidth = elementSize(() : number | undefined => this.window.width(), "Window Width");
         this.windowHeight = elementSize(() : number | undefined => this.window.height(), "Window Height");
         this.musicCircleOffset = elementSize(() : number | undefined => this.window.innerWidth(), "Window Inner Width") / 25;
     }
 
-    static centerPlayer() : void {
+    static centerPlayer(): void {
         [this.musicCircle, this.musicCircleBuffered, this.musicCirclePlayed, this.musicCirclePlayed2]
             .forEach((e: MusicCircle) : void => {
                 e.center(this.windowWidth, this.windowHeight, this.musicCircleOffset);
@@ -290,7 +289,7 @@ export default class UI {
         this.musicCircleBuffered.updateProgress(progress);
     }
 
-    static placeAlbum() : void {
+    static placeAlbum(): void {
         this.albumCover.css({
             top: this.windowHeight / 2 - this.musicCircle.getHeight() / 2 - this.musicCircleOffset
                 + (this.musicCircle.getHeight() - elementSize((): number | undefined => this.albumCover.height(), "Album Cover Height")) / 2
@@ -310,7 +309,7 @@ export default class UI {
         });
     }
 
-    static placePlayerBar() {
+    static placePlayerBar(): void {
         const playerBarHeight: number = elementSize((): number | undefined => this.playerBar.height(), "Player Bar Height");
 
         this.playerBar.css({
@@ -322,14 +321,14 @@ export default class UI {
         });
     }
 
-    static initPlayerComponent() {
-        let progress_start: Rect = this.svg.rect(PROGRESS_START_WIDTH, PROGRESS_START_HEIGHT).fill('white');
-        let progress_circle: Circle = this.svg.circle(PROGRESS_CIRCLE_RADIUS*2).fill('#e1e1e1');
+    static initPlayerComponent(): void {
+        const progress_start: Rect = this.svg.rect(PROGRESS_START_WIDTH, PROGRESS_START_HEIGHT).fill('white');
+        const progress_circle: Circle = this.svg.circle(PROGRESS_CIRCLE_RADIUS*2).fill('#e1e1e1');
         progress_circle.addClass("progressCircle");
 
-        let startRecPosnX: number = this.svg.width() / 2 - PROGRESS_START_WIDTH / 2;
-        let progressCirclePosnX: number = this.svg.width() / 2;
-        let progressCirclePosnY: number = PROGRESS_CIRCLE_RADIUS + (PROGRESS_START_HEIGHT - PROGRESS_CIRCLE_RADIUS*2)/2;
+        const startRecPosnX: number = this.svg.width() / 2 - PROGRESS_START_WIDTH / 2;
+        const progressCirclePosnX: number = this.svg.width() / 2;
+        const progressCirclePosnY: number = PROGRESS_CIRCLE_RADIUS + (PROGRESS_START_HEIGHT - PROGRESS_CIRCLE_RADIUS*2)/2;
 
         this.playerDiv.css({
             top: -(PROGRESS_START_HEIGHT/2),
@@ -344,7 +343,7 @@ export default class UI {
             add.blend(add.$source, blur, "normal");
         });
 
-        let $progressFilter = $("div.musicCircle div#playerControl").find("filter:first-child");
+        const $progressFilter = $("div.musicCircle div#playerControl").find("filter:first-child");
 
         $progressFilter[0].setAttribute("width", "200%");
         $progressFilter[0].setAttribute("height", "200%");
@@ -352,18 +351,18 @@ export default class UI {
         $progressFilter[0].setAttribute("y", "-40%");
     }
 
-    static updateSongInfo(song: Song) {
+    static updateSongInfo(song: Song): void {
         UI.title.text(song.getTitle());
         UI.artist.text(song.getArtist());
 
         // TODO: Album info
     }
 
-    static updateSongDuration(song: Song) {
+    static updateSongDuration(song: Song): void {
         this.totalTime.text(timeStyler(song.getDuration()));
     }
 
-    static updateVolumeUI(volume: number) {
+    static updateVolumeUI(volume: number): void {
         if (volume === 0 && this.volumeIcon.hasClass(VOL_ON_ICON)) {
             this.volumeIcon.removeClass(VOL_ON_ICON).addClass(VOL_OFF_ICON);
         } else if (volume > 0 && this.volumeIcon.hasClass(VOL_OFF_ICON)) {
@@ -373,7 +372,7 @@ export default class UI {
         this.volumeSlider.val(volume.toString());
     }
 
-    static timeUpdate(currentTimeSec: number, playedPercent: number, progressController: JQuery<HTMLElement>) {
+    static timeUpdate(currentTimeSec: number, playedPercent: number, progressController: JQuery<HTMLElement>): void {
         progressController.css({
             transform: 'rotate(' + 360 * playedPercent + 'deg)'
         });
@@ -386,14 +385,13 @@ export default class UI {
               posnY = -(y - this.musicCircle.getOffset().top - this.musicCircle.getHeight() / 2);
 
         let rotateDegree = 90 - (Math.atan2(posnY, posnX) * (180/Math.PI));
-        let timeAfterDrag;
 
         // Progress circle wrap around
         if (rotateDegree < 0) rotateDegree = 90 + rotateDegree + 270;
 
         // Update UI to reflect progress after dragging
         progressController.css({'transform': 'rotate(' + rotateDegree + 'deg)'});
-        timeAfterDrag = duration * (rotateDegree / 360);
+        const timeAfterDrag = duration * (rotateDegree / 360);
         this.currentTime.text(timeStyler(timeAfterDrag));
         this.updatePlayProgress(rotateDegree / 360 * 100);
 

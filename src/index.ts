@@ -15,9 +15,9 @@ jQuery(() => {
 
     const progressController = $(".progressCircle").eq(0);
 
-    let audio: HTMLAudioElement = document.getElementById('song') as HTMLAudioElement;
-    let player: Player = new Player(audio);
-    let song: Song = new Song(DEFAULT_SONG_SRC, UI.updateSongInfo);
+    const audio: HTMLAudioElement = document.getElementById('song') as HTMLAudioElement;
+    const player: Player = new Player(audio);
+    const song: Song = new Song(DEFAULT_SONG_SRC, UI.updateSongInfo);
 
     // Set current playing song and update song duration
     player.setSong(song);
@@ -68,7 +68,7 @@ jQuery(() => {
      * same size or by keeping the size of the span
      * element constant
     */
-    volumeSlider.oninput = (): any => {
+    volumeSlider.oninput = () => {
         player.setVolume(parseInt(volumeSlider.value) / 100);
     }
     volumeSlider.onmouseup = () => {
@@ -90,7 +90,7 @@ jQuery(() => {
     });
 
     // Register time update handler (player controller & current time update)
-    let timeUpdateHandler = () =>
+    const timeUpdateHandler = () =>
         UI.timeUpdate(audio.currentTime, audio.currentTime / song.getDuration(), progressController);
     audio.addEventListener('timeupdate', timeUpdateHandler);
 
