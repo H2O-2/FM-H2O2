@@ -50,8 +50,6 @@ jQuery(() => {
                 UI.updateVolumeUI(player.volumeUnitDown());
                 break;
             default:
-                // DEBUG
-                console.log(e.key);
                 break;
         }
     })
@@ -112,4 +110,12 @@ jQuery(() => {
             audio.currentTime = timeAfterDrag;
         });
     });
+
+    $("#showAlbum").on("mouseenter", UI.displayAlbum);
+    $("#showAlbum").on("mouseleave", UI.hideAlbum);
+
+
+    window.onunload = () => {
+        song.cleanup();
+    }
 })

@@ -1,13 +1,15 @@
 import jsmediatags from "jsmediatags";
 import { jsmediatagsError, PictureType, TagType } from "jsmediatags/types";
 
+const DEFAULT_ALBUM_URL: string = "../img/noThankYou.jpg"
+
 export default class Song {
     private songDuration: number = -1;
     private songSrc: string;
     private songTitle: string | undefined;
     private songArtist: string | undefined;
     private songAlbum: string | undefined;
-    private songCover: PictureType | undefined;
+    private songCoverURL: string = DEFAULT_ALBUM_URL;
 
     constructor(songSrc: string, updateUI: (song: Song) => void) {
         this.songSrc = songSrc;
@@ -16,7 +18,13 @@ export default class Song {
                 this.songTitle = tag.tags.title;
                 this.songArtist = tag.tags.artist;
                 this.songAlbum = tag.tags.album;
-                this.songCover = tag.tags.picture;
+
+                const cover: PictureType | undefined = tag.tags.picture;
+                if (cover) {
+                    const blob = new Blob([new Uint8Array(cover.data)], { type: cover.format });
+                    this.songCoverURL = URL.createObjectURL(blob);
+                }
+
                 // Update UI after song metadata is loaded
                 updateUI(this);
             },
@@ -46,7 +54,15 @@ export default class Song {
         return this.songArtist ? this.songArtist : "";
     }
 
-    getAlbum(): string {
+    getAlbumName(): string {
         return this.songAlbum ? this.songAlbum : "";
+    }
+
+    getAlbumCover(): string {
+        return this.songCoverURL;
+    }
+
+    cleanup(): void {
+        URL.revokeObjectURL(this.songCoverURL);
     }
 }

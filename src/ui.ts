@@ -2,6 +2,8 @@ import { Svg, SVG, Rect, Circle, Filter, GaussianBlurEffect} from "@svgdotjs/svg
 import "@svgdotjs/svg.filter.js";
 import Song from "./song";
 
+type TimeoutId = number;
+
 const PROGRESS_CIRCLE_BORDER = 2;
 const PROGRESS_CIRCLE_RADIUS = 8;
 const PROGRESS_START_HEIGHT = 24;
@@ -12,7 +14,7 @@ const VOL_OFF_ICON = "fa-volume-off";
 // Return the output of `sizeFn` if it's valid or throw an Error
 function elementSize(sizeFn: () => number | undefined, id : string): number {
     const n: number | undefined = sizeFn();
-    if (!n) throw Error(`Cannot get value of ${id}`);
+    if (n === undefined) throw Error(`Cannot get value of ${id}`);
 
     return n;
 }
@@ -155,14 +157,15 @@ class RythmCircle extends MusicCircle {
     }
 
     placeElementAtBottom(element: JQuery<HTMLElement>, windowWidth: number, windowHeight: number): void {
+        console.log(element.width());
         element.css({
             top: this.height + (windowHeight - this.height) / 2,
-            left: windowWidth / 2 - elementSize(() : number | undefined => element.width(), "RythmCircle Bottom Element") / 2});
+            left: windowWidth / 2 - elementSize(() : number | undefined => element.width(), "RythmCircle Bottom Element") / 2
+        });
     }
 
     draw(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D): void {
         ctx.beginPath();
-        console.log(canvas.width / 2, canvas.height / 2);
         ctx.arc(canvas.width / 2, canvas.height / 2 , canvas.height / 2 - 3, 0, 2 * Math.PI);
         ctx.lineWidth = 3;
         ctx.strokeStyle = '#d78bff';
@@ -178,7 +181,7 @@ export default class UI {
     private static title: JQuery<HTMLElement>;
     private static artist: JQuery<HTMLInputElement>;
     private static showAlbum: JQuery<HTMLElement>;
-    private static albumCover: JQuery<HTMLElement>;
+    private static albumCover: JQuery<HTMLDivElement>;
     private static albumName: JQuery<HTMLElement>;
     private static currentTime: JQuery<HTMLElement>;
     private static totalTime: JQuery<HTMLElement>;
@@ -202,6 +205,9 @@ export default class UI {
     private static windowWidth: number;
     private static windowHeight: number;
     private static musicCircleOffset: number;
+
+    private static timer: TimeoutId = 0;
+    private static albumDisplayed: boolean = false;
 
     static init(window: JQuery<Window>): void {
         this.window = window;
@@ -354,8 +360,13 @@ export default class UI {
     static updateSongInfo(song: Song): void {
         UI.title.text(song.getTitle());
         UI.artist.text(song.getArtist());
+        UI.albumName.text(song.getAlbumName());
 
-        // TODO: Album info
+        UI.albumCover.css({
+            backgroundImage: `url(${song.getAlbumCover()})`
+        });
+
+        UI.rhythmCircle.placeElementAtBottom(UI.albumName, UI.windowWidth, UI.windowHeight);
     }
 
     static updateSongDuration(song: Song): void {
@@ -396,5 +407,29 @@ export default class UI {
         this.updatePlayProgress(rotateDegree / 360 * 100);
 
         return timeAfterDrag;
+    }
+
+    static displayAlbum(): void {
+        UI.timer = window.setTimeout(function () {
+            UI.background.delay(300).fadeTo(400, .1, "swing");
+            UI.functionIcons.delay(300).fadeOut(100);
+            UI.albumCover.show().delay(300).fadeTo(300, 1, "swing");
+            UI.albumName.show().delay(300).fadeTo(400, 1, "swing");
+            $(".songInfo").delay(300).fadeOut();
+            UI.albumDisplayed = true;
+        }, 500);
+    }
+
+    static hideAlbum(): void {
+        if (UI.albumDisplayed) {
+            UI.background.delay(300).fadeTo(400, .5, "swing");
+            UI.functionIcons.delay(300).fadeIn();
+            UI.albumCover.delay(300).fadeTo(300, 0, "swing").hide(0);
+            UI.albumName.delay(300).fadeTo(400, 0, "swing").hide(0);
+            $(".songInfo").delay(200).fadeIn(100);
+            UI.albumDisplayed = false;
+        } else {
+            window.clearTimeout(UI.timer);
+        }
     }
 }

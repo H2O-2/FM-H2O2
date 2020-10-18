@@ -17,5 +17,9 @@
     ],
     "rules": {
         "@typescript-eslint/no-inferrable-types": "off"
-    }
+    },
+    "overrides": [{
+        "files": ["src/*.ts"],
+        "excludedFiles": ["*.js", "webpack.config.js"]
+    }]
 }
