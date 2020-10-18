@@ -3,8 +3,7 @@ import Player from './player'
 import jQuery from 'jquery'
 import UI from './ui';
 
-const DEFAULT_SONG_SRC: string = "https://fm.h2o2.me/testMusic2.mp3"
-// const DEFAULT_SONG_SRC: string = "http://localhost:8080/testMusic2.mp3";
+const DEFAULT_SONG_SRC: string = "https://fm.h2o2.me/testMusic.mp3"
 
 jQuery(() => {
     const $window:JQuery<Window> = $(window);
@@ -114,6 +113,9 @@ jQuery(() => {
     $("#showAlbum").on("mouseenter", UI.displayAlbum);
     $("#showAlbum").on("mouseleave", UI.hideAlbum);
 
+    $window.on("resize", () => {
+        UI.resize($window);
+    });
 
     window.onunload = () => {
         song.cleanup();

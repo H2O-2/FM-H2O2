@@ -157,7 +157,6 @@ class RythmCircle extends MusicCircle {
     }
 
     placeElementAtBottom(element: JQuery<HTMLElement>, windowWidth: number, windowHeight: number): void {
-        console.log(element.width());
         element.css({
             top: this.height + (windowHeight - this.height) / 2,
             left: windowWidth / 2 - elementSize(() : number | undefined => element.width(), "RythmCircle Bottom Element") / 2
@@ -431,5 +430,20 @@ export default class UI {
         } else {
             window.clearTimeout(UI.timer);
         }
+    }
+
+    static resize(window: JQuery<Window>): void {
+        UI.window = window;
+        UI.updateWindowSize();
+        UI.centerPlayer();
+        UI.placeAlbum();
+        UI.rhythmCircle.placeElementAtBottom(UI.albumName, UI.windowWidth, UI.windowHeight);
+        UI.rhythmCircle.placeElementAtBottom(UI.functionIcons, UI.windowWidth, UI.windowHeight);
+        UI.placePlayerBar()
+
+        UI.albumName.css({
+            top: UI.rhythmCircle.getHeight() + (UI.windowHeight - UI.rhythmCircle.getHeight()) / 2,
+            left: UI.windowWidth / 2 - elementSize(() => UI.albumName.width(), "Album Name Width") / 2
+        });
     }
 }
