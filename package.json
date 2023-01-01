@@ -14,7 +14,7 @@
     "normalize.css": "^7.0.0",
     "svg.filter.js": "^2.0.2",
     "svg.js": "^2.7.1",
-    "webpack": "^4.44.2"
+    "webpack": "^5.75.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.11.6",
@@ -26,10 +26,10 @@
     "@types/jsmediatags": "^3.9.1",
     "@typescript-eslint/eslint-plugin": "^4.4.1",
     "@typescript-eslint/parser": "^4.4.1",
-    "babel-loader": "^8.1.0",
+    "babel-loader": "^8.3.0",
     "eslint": "^7.11.0",
     "typescript": "^4.0.3",
-    "webpack-cli": "^3.3.12"
+    "webpack-cli": "^5.0.1"
   },
   "scripts": {
     "type-check": "tsc --noEmit",
